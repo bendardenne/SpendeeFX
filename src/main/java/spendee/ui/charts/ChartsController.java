@@ -9,6 +9,7 @@ import spendee.model.DataStore;
 import spendee.model.Transaction;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -40,7 +41,7 @@ public class ChartsController implements Initializable {
       incomeDonut.setData( FXCollections.observableList( incomeData ) );
       expenseDonut.setData( FXCollections.observableList( expenseData ) );
 
-      timeSeries.getData().add( makeBalanceSeries( e.getList().stream() ) );
+      timeSeries.setData( FXCollections.singletonObservableList( makeBalanceSeries( e.getList().stream() ) ) );
     } );
   }
 
@@ -71,7 +72,9 @@ public class ChartsController implements Initializable {
             Transaction::getCategory,
             Collectors.summingDouble( t -> Math.abs( t.getAmount() ) ) ) );
 
-    return amountByCategory.entrySet().stream()
+    return amountByCategory.entrySet()
+                           .stream()
+                           .sorted( Comparator.comparingDouble( Map.Entry::getValue ) )
                            .map( entry -> new PieChart.Data( entry.getKey(), entry.getValue() ) )
                            .collect( toList() );
   }

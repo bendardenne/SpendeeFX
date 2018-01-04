@@ -1,0 +1,9 @@
+- Add filters
+- Improve table style
+- Map categories to Spendee Colors
+- Use Spendee icons?
+- Add a configurable initial wallet value
+- Use dates as X axis on the line chart
+- Add controls on the line chart and adapt time-filter based on that (would be awesome)
+- Deal with error handling
+- Reopen last CSV
