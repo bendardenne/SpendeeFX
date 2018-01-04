@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.*?>
+<?import spendee.ui.charts.DonutChart?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="spendee.ui.charts.ChartsController"
+          alignment="CENTER"
+          stylesheets="/ui/css/charts/charts.css">
+
+  <DonutChart fx:id="incomeDonut"
+              animated="false"
+              GridPane.columnIndex="0"
+              GridPane.hgrow="SOMETIMES"
+              GridPane.vgrow="SOMETIMES"/>
+
+  <DonutChart fx:id="expenseDonut"
+              animated="true"
+              GridPane.columnIndex="1"
+              GridPane.hgrow="SOMETIMES"
+              GridPane.vgrow="SOMETIMES"/>
+
+  <LineChart fx:id="timeSeries"
+             GridPane.rowIndex="1"
+             GridPane.columnSpan="2"
+             GridPane.hgrow="SOMETIMES"
+             GridPane.vgrow="SOMETIMES">
+    <xAxis>
+      <CategoryAxis label="Time" fx:id="xAxis"/>
+    </xAxis>
+    <yAxis>
+      <NumberAxis fx:id="yAxis" side="LEFT"/>
+    </yAxis>
+  </LineChart>
+
+</GridPane>

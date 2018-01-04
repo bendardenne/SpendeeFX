@@ -1,0 +1,16 @@
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane id="vbox" prefHeight="400" prefWidth="800"
+            xmlns:fx="http://javafx.com/fxml">
+  <top>
+    <fx:include source="menubar.fxml"/>
+  </top>
+
+  <left>
+    <!--Filters-->
+  </left>
+
+  <center>
+    <fx:include source="content.fxml"/>
+  </center>
+
+</BorderPane>

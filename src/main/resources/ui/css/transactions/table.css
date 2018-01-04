@@ -1,0 +1,7 @@
+.cell-amount-negative {
+    -fx-background-color: #FF1111;
+}
+
+.cell-amount-positive {
+    -fx-background-color: #11FF11;
+}
