@@ -16,7 +16,7 @@ public class DataStore {
 
   static {
     // Restore last open file.
-    String file = Preferences.userRoot().node( DataStore.class.getName()).get( OPEN_FILE.getKey(), OPEN_FILE.getValue() );
+    String file = Preferences.userRoot().get( OPEN_FILE.getKey(), OPEN_FILE.getValue() );
     if(file != null) {
       try {
         instance.setTransactions( CSVDecoder.decode( Paths.get(file) ) );

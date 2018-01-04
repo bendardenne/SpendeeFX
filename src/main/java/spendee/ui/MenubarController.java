@@ -30,7 +30,7 @@ public class MenubarController {
       try {
         List<Transaction> decoded = CSVDecoder.decode( file.toPath() );
         dataStore.setTransactions( decoded );
-        Preferences.userRoot().node( DataStore.class.getName()).put( OPEN_FILE.getKey(), file.toString() );
+        Preferences.userRoot().put( OPEN_FILE.getKey(), file.toString() );
       }
       catch ( IOException aE ) {
         // TODO
