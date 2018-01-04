@@ -2,6 +2,7 @@ package spendee.ui.charts;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
@@ -31,18 +32,25 @@ public class ChartsController implements Initializable {
   private DataStore dataStore = DataStore.getInstance();
 
   @Override public void initialize( URL location, ResourceBundle resources ) {
-    dataStore.getTransactions().addListener( ( ListChangeListener<? super Transaction> ) ( e ) -> {
-      Stream<? extends Transaction> incomes = e.getList().stream().filter( t -> t.getAmount() > 0 );
-      Stream<? extends Transaction> expenses = e.getList().stream().filter( t -> t.getAmount() < 0 );
+    ObservableList<Transaction> transactions = dataStore.getTransactions();
+    updateCharts( transactions );
 
-      List<PieChart.Data> incomeData = makePieData( incomes );
-      List<PieChart.Data> expenseData = makePieData( expenses );
-
-      incomeDonut.setData( FXCollections.observableList( incomeData ) );
-      expenseDonut.setData( FXCollections.observableList( expenseData ) );
-
-      timeSeries.setData( FXCollections.singletonObservableList( makeBalanceSeries( e.getList().stream() ) ) );
+    transactions.addListener( ( ListChangeListener<? super Transaction> ) ( e ) -> {
+      updateCharts( e.getList() );
     } );
+  }
+
+  private void updateCharts( ObservableList<? extends Transaction> aTransactions ) {
+    Stream<? extends Transaction> incomes = aTransactions.stream().filter( t -> t.getAmount() > 0 );
+    Stream<? extends Transaction> expenses = aTransactions.stream().filter( t -> t.getAmount() < 0 );
+
+    List<PieChart.Data> incomeData = makePieData( incomes );
+    List<PieChart.Data> expenseData = makePieData( expenses );
+
+    incomeDonut.setData( FXCollections.observableList( incomeData ) );
+    expenseDonut.setData( FXCollections.observableList( expenseData ) );
+
+    timeSeries.setData( FXCollections.singletonObservableList( makeBalanceSeries( aTransactions.stream() ) ) );
   }
 
   private XYChart.Series<String, Number> makeBalanceSeries( Stream<? extends Transaction> aStream ) {

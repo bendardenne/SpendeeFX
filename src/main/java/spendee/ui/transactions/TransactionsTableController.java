@@ -12,9 +12,6 @@ import java.util.ResourceBundle;
 public class TransactionsTableController implements Initializable {
 
   @FXML private TableView<Transaction> transactionsTable;
-//  @FXML private TableColumn dateColumn;
-//  @FXML private TableColumn noteColumn;
-//  @FXML private TableColumn amountColumn;
 
   private DataStore dataStore = DataStore.getInstance();
 

@@ -11,6 +11,9 @@ import spendee.model.Transaction;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.prefs.Preferences;
+
+import static spendee.Preferences.OPEN_FILE;
 
 public class MenubarController {
 
@@ -27,6 +30,7 @@ public class MenubarController {
       try {
         List<Transaction> decoded = CSVDecoder.decode( file.toPath() );
         dataStore.setTransactions( decoded );
+        Preferences.userRoot().node( DataStore.class.getName()).put( OPEN_FILE.getKey(), file.toString() );
       }
       catch ( IOException aE ) {
         // TODO

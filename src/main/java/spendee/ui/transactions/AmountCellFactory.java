@@ -12,14 +12,14 @@ public class AmountCellFactory<S> implements Callback<TableColumn<S, Double>, Ta
       @Override protected void updateItem( Double item, boolean empty ) {
         super.updateItem( item, empty );
 
-        if (empty || item == null) {
+        if ( empty || item == null ) {
           setText( null );
           setGraphic( null );
-        } else {
+        }
+        else {
           getStyleClass().removeAll( "cell-amount-positive", "cell-amount-negative" );
           getStyleClass().add( item < 0 ? "cell-amount-negative" : "cell-amount-positive" );
           setText( item.toString() );
-
 
 
         }

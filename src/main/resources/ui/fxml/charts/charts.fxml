@@ -13,14 +13,12 @@
 
   <DonutChart fx:id="incomeDonut"
               clockwise="false"
-              animated="false"
               GridPane.columnIndex="0"
               GridPane.hgrow="SOMETIMES"
               GridPane.vgrow="SOMETIMES"/>
 
   <DonutChart fx:id="expenseDonut"
               clockwise="false"
-              animated="true"
               GridPane.columnIndex="1"
               GridPane.hgrow="SOMETIMES"
               GridPane.vgrow="SOMETIMES"/>

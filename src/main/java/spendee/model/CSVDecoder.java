@@ -21,19 +21,14 @@ public class CSVDecoder {
   private static final int NOTE_COLUMN = 6;
 
   public static List<Transaction> decode( Path aCsv ) throws IOException {
+    Stream<String> lines = Files.lines( aCsv ).skip(1);  //Skip CSV header
 
-    Stream<String> lines = Files.lines( aCsv );
-
-    // SKip CSV header
-    lines = lines.skip( 1 );
-
-    // Build transactions
     return lines.map( CSVDecoder::makeTransaction ).collect( toList() );
   }
 
   private static Transaction makeTransaction( String aCSVLine ) {
     List<String> strings = Arrays.stream( aCSVLine.split( "," ) )
-                                 .map( s -> s.substring( 1, s.length() - 1 ) )
+                                 .map( s -> s.substring( 1, s.length() - 1 ) )    // Remove enclosing quotes
                                  .collect( Collectors.toList() );
 
     LocalDateTime date = LocalDateTime.parse( strings.get( DATE_COLUMN ), DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
