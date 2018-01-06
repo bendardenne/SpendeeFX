@@ -1,21 +1,17 @@
 package spendee.ui.transactions;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
 import spendee.model.DataStore;
 import spendee.model.Transaction;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class TransactionsTableController implements Initializable {
+public class TransactionsTableController {
 
   @FXML private TableView<Transaction> transactionsTable;
 
   private DataStore dataStore = DataStore.getInstance();
 
-  @Override public void initialize( URL location, ResourceBundle resources ) {
+  @FXML public void initialize( ) {
     transactionsTable.setItems( dataStore.getTransactions() );
   }
 }

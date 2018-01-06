@@ -4,23 +4,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import spendee.model.DataStore;
 import spendee.model.Transaction;
 
-import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.concurrent.atomic.DoubleAdder;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-public class ChartsController implements Initializable {
+public class ChartsController {
 
   @FXML private DonutChart incomeDonut;
   @FXML private DonutChart expenseDonut;
@@ -31,7 +28,7 @@ public class ChartsController implements Initializable {
 
   private DataStore dataStore = DataStore.getInstance();
 
-  @Override public void initialize( URL location, ResourceBundle resources ) {
+  @FXML public void initialize( ) {
     ObservableList<Transaction> transactions = dataStore.getTransactions();
     updateCharts( transactions );
 

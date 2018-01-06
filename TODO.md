@@ -1,4 +1,4 @@
-- Add filters
+- Add filters   (Date range: JFXtras)
 - Improve table style
 - Map categories to Spendee Colors
 - Use Spendee icons?
@@ -8,4 +8,6 @@
 - Deal with error handling
 - Style line in line chart for positive and negative balances
 - Introduce nested categories
-- Interpret entities in note fields (e.g. '  = &#39;)
+- Interpret entities in note fields (e.g. '  = \&#39;)
+- Clickable hashtags 
+- Suggestion of hashtags in filter (often used)

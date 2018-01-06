@@ -1,7 +1,15 @@
 .cell-amount-negative {
-    -fx-background-color: #FF1111;
+    -fx-text-fill: #FF1111;
 }
 
 .cell-amount-positive {
-    -fx-background-color: #11FF11;
+    -fx-text-fill: #11FF11;
+}
+
+.cell-amount-negative, .cell-amount-positive {
+    -fx-font-weight: bold;
+}
+
+.amount-column {
+    -fx-alignment: center;
 }

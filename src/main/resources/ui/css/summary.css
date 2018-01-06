@@ -1,0 +1,11 @@
+#expenseTotal {
+    -fx-text-fill: #FF1111;
+}
+
+#incomeTotal {
+    -fx-text-fill: #11FF11;
+}
+
+.summary-label {
+    -fx-font-size: 50;
+}

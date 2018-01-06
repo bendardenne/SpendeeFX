@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="spendee.ui.SummaryController"
+          stylesheets="/ui/css/summary.css">
+
+  <Label fx:id="incomeTotal" id="incomeTotal" styleClass="summary-label"
+         GridPane.halignment="CENTER"
+         GridPane.columnIndex="0"
+         GridPane.hgrow="ALWAYS"/>
+
+  <Label fx:id="expenseTotal" id="expenseTotal" styleClass="summary-label"
+         GridPane.halignment="CENTER"
+         GridPane.columnIndex="1"
+         GridPane.hgrow="ALWAYS"/>
+
+</GridPane>

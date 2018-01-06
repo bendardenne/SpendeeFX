@@ -1,2 +1,2 @@
 # SpendeeFX
-Toy JavaFX application for visualizing a speendee CSV
+Toy JavaFX application for visualizing a Spendee CSV. 

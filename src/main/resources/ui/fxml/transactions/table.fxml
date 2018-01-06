@@ -9,7 +9,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="spendee.ui.transactions.TransactionsTableController"
             stylesheets="/ui/css/transactions/table.css">
-  <TableView fx:id="transactionsTable"
+  <TableView fx:id="transactionsTable"  id="transactions-table"
              AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
              AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
     <columnResizePolicy>
@@ -25,13 +25,19 @@
         </cellFactory>
       </TableColumn>
 
+      <TableColumn text="Category">
+        <cellValueFactory>
+          <PropertyValueFactory property="category"/>
+        </cellValueFactory>
+      </TableColumn>
+
       <TableColumn text="Note">
         <cellValueFactory>
           <PropertyValueFactory property="note"/>
         </cellValueFactory>
       </TableColumn>
 
-      <TableColumn text="Amount">
+      <TableColumn text="Amount" styleClass="amount-column">
         <cellValueFactory>
           <PropertyValueFactory property="amount"/>
         </cellValueFactory>

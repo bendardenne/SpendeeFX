@@ -1,0 +1,6 @@
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<!-- TODO layout -->
+<FlowPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController" orientation="VERTICAL">
+  <TextField fx:id="noteFilter" promptText="Note"/>
+</FlowPane>

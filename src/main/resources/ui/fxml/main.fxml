@@ -6,7 +6,7 @@
   </top>
 
   <left>
-    <!--Filters-->
+    <fx:include source="filters.fxml" />
   </left>
 
   <center>

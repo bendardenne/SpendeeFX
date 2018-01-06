@@ -19,6 +19,7 @@
 
   <DonutChart fx:id="expenseDonut"
               clockwise="false"
+              animated="false"
               GridPane.columnIndex="1"
               GridPane.hgrow="SOMETIMES"
               GridPane.vgrow="SOMETIMES"/>

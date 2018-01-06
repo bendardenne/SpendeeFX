@@ -20,8 +20,6 @@ public class AmountCellFactory<S> implements Callback<TableColumn<S, Double>, Ta
           getStyleClass().removeAll( "cell-amount-positive", "cell-amount-negative" );
           getStyleClass().add( item < 0 ? "cell-amount-negative" : "cell-amount-positive" );
           setText( item.toString() );
-
-
         }
       }
     };
