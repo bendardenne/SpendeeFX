@@ -11,3 +11,4 @@
 - Interpret entities in note fields (e.g. '  = \&#39;)
 - Clickable hashtags 
 - Suggestion of hashtags in filter (often used)
+- Add a status bar

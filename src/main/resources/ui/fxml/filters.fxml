@@ -1,6 +1,14 @@
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.FlowPane?>
-<!-- TODO layout -->
-<FlowPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController" orientation="VERTICAL">
-  <TextField fx:id="noteFilter" promptText="Note"/>
-</FlowPane>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.MenuButton?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController">
+  <TitledPane text="Filters" collapsible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0"
+              AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
+    <VBox spacing="20">
+      <MenuButton fx:id="categoryFilter" maxWidth="Infinity" />
+      <TextField fx:id="noteFilter" promptText="Note"/>
+    </VBox>
+  </TitledPane>
+
+</AnchorPane>
