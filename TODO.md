@@ -10,7 +10,5 @@
 - Interpret entities in note fields (e.g. '  = \&#39;)
 - Clickable hashtags 
 - Suggestion of hashtags in filter (often used)
-- Check / Handle categories with same name in expense and income 
 - Persist filters
-- Split Income and Expense categories in category filter
 - Allow hover on pie slices and series points
