@@ -18,6 +18,8 @@ import static spendee.Preferences.OPEN_FILE;
 public class MenubarController {
 
   @FXML private MenuBar menuBar;
+
+  private StatusController statusController;
   private DataStore dataStore = DataStore.getInstance();
 
   @FXML
@@ -33,11 +35,13 @@ public class MenubarController {
         Preferences.userRoot().put( OPEN_FILE.getKey(), file.toString() );
       }
       catch ( IOException aE ) {
-        // TODO
-        aE.printStackTrace();
+        statusController.message( "Could not open file: " + aE.getMessage() );
       }
     }
   }
 
+  public void setStatusController( StatusController aStatusController ) {
+    statusController = aStatusController;
+  }
 
 }

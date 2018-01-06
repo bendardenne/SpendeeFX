@@ -1,16 +1,20 @@
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane id="vbox" prefHeight="400" prefWidth="800"
-            xmlns:fx="http://javafx.com/fxml">
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="spendee.ui.MainController">
   <top>
-    <fx:include source="menubar.fxml"/>
+    <fx:include fx:id="menubar" source="menubar.fxml"/>
   </top>
 
   <left>
-    <fx:include source="filters.fxml" />
+    <fx:include fx:id="filters" source="filters.fxml" />
   </left>
 
   <center>
     <fx:include source="content.fxml"/>
   </center>
 
+  <bottom>
+    <fx:include fx:id="status" source="statusbar.fxml"/>
+  </bottom>
 </BorderPane>

@@ -11,10 +11,12 @@ import javafx.scene.control.*;
 import spendee.model.DataStore;
 import spendee.model.EFilterType;
 import spendee.model.Transaction;
+import spendee.ui.StatusController;
 
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static java.util.stream.Collectors.toList;
 
@@ -25,14 +27,26 @@ public class FiltersController {
   @FXML private TextField noteFilter;
   @FXML private MenuButton categoryFilter;
 
+  private StatusController statusController;
+
   @FXML public void initialize() {
     noteFilter.textProperty().addListener( ( observable, oldValue, newValue ) ->
-                                               dataStore.filter( EFilterType.NOTE,
-                                                                 t -> Pattern
-                                                                     .compile( newValue, Pattern.CASE_INSENSITIVE )
-                                                                     .matcher( t.getNote() ).find() ) );
+                                               dataStore.filter( EFilterType.NOTE, makeRegexPredicate( newValue ) ) );
 
     initializeCategoryFilter();
+  }
+
+  private Predicate<Transaction> makeRegexPredicate( String newValue ) {
+    return t -> {
+      try {
+        return Pattern.compile( newValue, Pattern.CASE_INSENSITIVE ).matcher( t.getNote() ).find();
+      }
+      catch ( PatternSyntaxException e ) {
+        statusController.message( "Incorrect regex: " + e.getDescription() );
+      }
+
+      return true;
+    };
   }
 
   private void initializeCategoryFilter() {
@@ -91,5 +105,9 @@ public class FiltersController {
     }, observables );
 
     categoryFilter.textProperty().bind( content );
+  }
+
+  public void setStatusController( StatusController aStatusController ) {
+    statusController = aStatusController;
   }
 }

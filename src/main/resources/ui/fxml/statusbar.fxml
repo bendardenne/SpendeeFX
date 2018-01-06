@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.controlsfx.control.StatusBar?>
+<StatusBar xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="spendee.ui.StatusController"
+           fx:id="statusBar"
+           text=""/>

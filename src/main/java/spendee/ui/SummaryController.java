@@ -7,6 +7,8 @@ import javafx.scene.control.Label;
 import spendee.model.DataStore;
 import spendee.model.Transaction;
 
+import java.text.DecimalFormat;
+
 
 public class SummaryController {
 
@@ -17,16 +19,17 @@ public class SummaryController {
 
   @FXML public void initialize() {
     ObservableList<Transaction> transactions = dataStore.getTransactions();
+    DecimalFormat formatter = new DecimalFormat( "#.##" );
 
     incomeTotal.textProperty().bind( Bindings.createStringBinding(
-        () -> Double.toString( transactions
+        () -> formatter.format( transactions
                                    .stream()
                                    .filter( t -> t.getAmount() > 0 )
                                    .mapToDouble( Transaction::getAmount )
                                    .sum() ), transactions ) );
 
     expenseTotal.textProperty().bind( Bindings.createStringBinding(
-        () -> Double.toString( transactions
+        () -> formatter.format( transactions
                                    .stream()
                                    .filter( t -> t.getAmount() < 0 )
                                    .mapToDouble( Transaction::getAmount )
