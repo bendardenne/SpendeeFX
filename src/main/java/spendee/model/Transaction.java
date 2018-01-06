@@ -7,9 +7,9 @@ public class Transaction {
   private double amount;
   private String note;
   private ZonedDateTime date;
-  private String category;
+  private Category category;
 
-  public Transaction( double aAmount, String aNote, ZonedDateTime aDate, String aCategory ) {
+  public Transaction( double aAmount, String aNote, ZonedDateTime aDate, Category aCategory ) {
     amount = aAmount;
     note = aNote;
     date = aDate;
@@ -28,7 +28,7 @@ public class Transaction {
     return date;
   }
 
-  public String getCategory() {
+  public Category getCategory() {
     return category;
   }
 }

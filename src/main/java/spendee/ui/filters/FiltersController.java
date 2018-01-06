@@ -8,16 +8,20 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import spendee.model.Category;
 import spendee.model.DataStore;
 import spendee.model.EFilterType;
 import spendee.model.Transaction;
 import spendee.ui.StatusController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 public class FiltersController {
@@ -58,46 +62,53 @@ public class FiltersController {
     categories.add( selectAll );
     categories.add( new SeparatorMenuItem() );
 
-    List<CheckMenuItem> categoryButtons = dataStore.getTransactions().stream()
-                                                   .map( Transaction::getCategory )
-                                                   .distinct()
-                                                   .map( CheckMenuItem::new )
-                                                   .collect( toList() );
+    Map<Category.Type, List<Category>> categoriesByType = dataStore.getTransactions().stream()
+                                                                   .map( Transaction::getCategory )
+                                                                   .collect( groupingBy( Category::getType ) );
 
-    Observable[] observables = categoryButtons.stream()
-                                              .map( CheckMenuItem::selectedProperty )
-                                              .collect( toList() )
-                                              .toArray( new Observable[categoryButtons.size()] );
+    List<CheckMenuItem> incomeEntries = getMenuItems( categoriesByType.get( Category.Type.INCOME ) );
+    List<CheckMenuItem> expenseEntries = getMenuItems( categoriesByType.get( Category.Type.EXPENSE ) );
+
+    categories.addAll( incomeEntries );
+    categories.add( new SeparatorMenuItem() );
+    categories.addAll( expenseEntries );
+
+    List<CheckMenuItem> allEntries = new ArrayList<>( incomeEntries );
+    allEntries.addAll( expenseEntries );
+
+    Observable[] observables = allEntries.stream()
+                                         .map( CheckMenuItem::selectedProperty )
+                                         .collect( toList() )
+                                         .toArray( new Observable[allEntries.size()] );
 
     EventHandler<ActionEvent> setupCategoryFilter = event -> {
-      selectAll.setSelected( categoryButtons.stream().allMatch( CheckMenuItem::isSelected ) );
+      selectAll.setSelected( allEntries.stream().allMatch( CheckMenuItem::isSelected ) );
 
-      Predicate<Transaction> predicate = t -> categoryButtons.stream()
-                                                             .map( CheckMenuItem.class::cast )
-                                                             .filter( CheckMenuItem::isSelected )
-                                                             .map( CheckMenuItem::getText )
-                                                             .anyMatch( t.getCategory()::equals );
+      Predicate<Transaction> predicate = t -> allEntries.stream()
+                                                        .map( CheckMenuItem.class::cast )
+                                                        .filter( CheckMenuItem::isSelected )
+                                                        .map( CheckMenuItem::getText )
+                                                        .anyMatch( t.getCategory().getName()::equals );
 
       dataStore.filter( EFilterType.CATEGORY, predicate );
     };
 
-    categoryButtons.forEach( item -> {
+    allEntries.forEach( item -> {
       item.setSelected( true );
-      categories.add( item );
       item.setOnAction( setupCategoryFilter );
     } );
 
     selectAll.setOnAction( event -> {
-      categoryButtons.stream()
+      allEntries.stream()
                      .map( CheckMenuItem.class::cast )
                      .forEach( i -> i.setSelected( selectAll.isSelected() ) );
       setupCategoryFilter.handle( event );
     } );
 
     StringBinding content = Bindings.createStringBinding( () -> {
-      long selected = categoryButtons.stream().filter( CheckMenuItem::isSelected ).count();
-      if ( selected == categoryButtons.size() ) {
-        return "All categories";
+      long selected = allEntries.stream().filter( CheckMenuItem::isSelected ).count();
+      if ( selected == allEntries.size() ) {
+        return "All categories (" + allEntries.size() + ")";
       }
       else {
         return selected + " categories";
@@ -105,6 +116,15 @@ public class FiltersController {
     }, observables );
 
     categoryFilter.textProperty().bind( content );
+  }
+
+  private List<CheckMenuItem> getMenuItems( List<Category> aCategories ) {
+    return aCategories.stream()
+                      .map( Category::getName )
+                      .distinct()
+                      .sorted()
+                      .map( CheckMenuItem::new )
+                      .collect( toList() );
   }
 
   public void setStatusController( StatusController aStatusController ) {

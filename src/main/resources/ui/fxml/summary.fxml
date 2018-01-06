@@ -7,6 +7,9 @@
           fx:controller="spendee.ui.SummaryController"
           stylesheets="/ui/css/summary.css">
 
+  <!-- TODO add labels to the labels + add balance label -->
+  <!-- Create Label subclass for these -->
+
   <Label fx:id="incomeTotal" id="incomeTotal" styleClass="summary-label"
          GridPane.halignment="CENTER"
          GridPane.columnIndex="0"

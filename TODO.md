@@ -4,9 +4,13 @@
 - Use Spendee icons?
 - Add a configurable initial wallet value
 - Add controls on the line chart and adapt time-filter based on that (would be awesome)  (cf JFXutils)
-- Deal with error handling
+- Deal with error handling (add logging)
 - Style line in line chart for positive and negative balances
 - Introduce nested categories
 - Interpret entities in note fields (e.g. '  = \&#39;)
 - Clickable hashtags 
 - Suggestion of hashtags in filter (often used)
+- Check / Handle categories with same name in expense and income 
+- Persist filters
+- Split Income and Expense categories in category filter
+- Allow hover on pie slices and series points

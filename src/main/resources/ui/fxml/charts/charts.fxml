@@ -12,13 +12,11 @@
           stylesheets="/ui/css/charts/charts.css">
 
   <DonutChart fx:id="incomeDonut"
-              clockwise="false"
               GridPane.columnIndex="0"
               GridPane.hgrow="SOMETIMES"
               GridPane.vgrow="SOMETIMES"/>
 
   <DonutChart fx:id="expenseDonut"
-              clockwise="false"
               animated="false"
               GridPane.columnIndex="1"
               GridPane.hgrow="SOMETIMES"

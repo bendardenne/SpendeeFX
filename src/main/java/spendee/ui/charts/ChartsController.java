@@ -10,6 +10,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
+import spendee.model.Category;
 import spendee.model.DataStore;
 import spendee.model.Transaction;
 
@@ -17,6 +18,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -86,8 +88,6 @@ public class ChartsController {
     } ).collect( Collectors.toList() );
 
     for ( Pair<Number, Double> balance : balances ) {
-      System.out.println(balance.getKey());
-      System.out.println(balance.getKey() instanceof Long);
       series.getData().add( new LineChart.Data<>( balance.getKey(), balance.getValue() ) );
     }
 
@@ -95,15 +95,15 @@ public class ChartsController {
   }
 
   private List<PieChart.Data> makePieData( Stream<? extends Transaction> aIncomes ) {
-    Map<String, Double> amountByCategory = aIncomes
+    Map<Category, Double> amountByCategory = aIncomes
         .collect( Collectors.groupingBy(
             Transaction::getCategory,
             Collectors.summingDouble( t -> Math.abs( t.getAmount() ) ) ) );
 
     return amountByCategory.entrySet()
                            .stream()
-                           .sorted( Comparator.comparingDouble( Map.Entry::getValue ) )
-                           .map( entry -> new PieChart.Data( entry.getKey(), entry.getValue() ) )
+                           .sorted( Collections.reverseOrder( Comparator.comparingDouble( Map.Entry::getValue ) ) )
+                           .map( entry -> new PieChart.Data( entry.getKey().getName(), entry.getValue() ) )
                            .collect( toList() );
   }
 }
