@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +33,9 @@ public class CSVDecoder {
                                  .map( s -> s.substring( 1, s.length() - 1 ) )    // Remove enclosing quotes
                                  .collect( Collectors.toList() );
 
-    LocalDateTime date = LocalDateTime.parse( strings.get( DATE_COLUMN ), DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
+    ZonedDateTime date = LocalDateTime.parse( strings.get( DATE_COLUMN ), DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ).atZone(
+        ZoneId.systemDefault() );
+
     double amount = Double.parseDouble( strings.get( AMOUNT_COLUMN ) );
     String comment = strings.get( NOTE_COLUMN );
     String category = strings.get( CATEGORY_COLUMN );

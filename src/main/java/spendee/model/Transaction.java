@@ -1,15 +1,15 @@
 package spendee.model;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Transaction {
 
   private double amount;
   private String note;
-  private LocalDateTime date;
+  private ZonedDateTime date;
   private String category;
 
-  public Transaction( double aAmount, String aNote, LocalDateTime aDate, String aCategory ) {
+  public Transaction( double aAmount, String aNote, ZonedDateTime aDate, String aCategory ) {
     amount = aAmount;
     note = aNote;
     date = aDate;
@@ -24,7 +24,7 @@ public class Transaction {
     return note;
   }
 
-  public LocalDateTime getDate() {
+  public ZonedDateTime getDate() {
     return date;
   }
 

@@ -31,10 +31,10 @@
              GridPane.hgrow="SOMETIMES"
              GridPane.vgrow="SOMETIMES">
     <xAxis>
-      <CategoryAxis fx:id="xAxis"/>
+      <NumberAxis fx:id="xAxis" forceZeroInRange="false" />
     </xAxis>
     <yAxis>
-      <NumberAxis fx:id="yAxis" side="LEFT"/>
+      <NumberAxis fx:id="yAxis" forceZeroInRange="false" side="LEFT"/>
     </yAxis>
   </LineChart>
 
