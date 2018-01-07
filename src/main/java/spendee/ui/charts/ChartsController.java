@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
@@ -152,7 +153,7 @@ public class ChartsController {
 
   private class HoverNode extends StackPane {
 
-    private TextFlow label;
+    private TextFlow label = new TextFlow(  );
 
     private HoverNode( Transaction aTransaction, double aValue ) {
       setPrefSize( 10, 10 );
@@ -169,8 +170,6 @@ public class ChartsController {
     }
 
     private void createLabel( Transaction aTransaction, double aValue ) {
-      label = new TextFlow();
-
       Text category = new Text( aTransaction.getCategory().getName() + "\n" );
       category.getStyleClass().add( "line-name-label" );
 
@@ -189,14 +188,14 @@ public class ChartsController {
 
       separator.setPrefWidth( resultingBalance.getBoundsInParent().getWidth() );
 
-      label.setLineSpacing( 5 );
       label.getChildren().addAll( category, date, note, amount,
                                   separator, new Text( "\n" ),
                                   resultingBalance );
 
       label.getStyleClass().addAll( "default-color0", "chart-line-symbol", "chart-series-line" );
+      label.setLineSpacing( 5 );
+      label.setPadding( new Insets( 10,10,10,10) );
       label.setTextAlignment( TextAlignment.CENTER );
-      label.setMouseTransparent( true );
       label.setMinSize( Label.USE_PREF_SIZE, Label.USE_PREF_SIZE );
       label.setTranslateY( 70 );
     }

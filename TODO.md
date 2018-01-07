@@ -1,6 +1,5 @@
-- Add date and amount filters (Date range: JFXtras)
+- Add date filter (Date range: JFXtras)
 - Persist filters
-- Add Reset filters buttons 
 - Improve table style
 - Add a configurable initial wallet value
 - Hashtag autocomplete

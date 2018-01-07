@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="spendee.ui.transactions.SummaryController"
           stylesheets="/ui/css/transactions/summary.css">
-
+  <padding>
+    <Insets top="5" bottom="5"/>
+  </padding>
   <Label id="incomeTotalLabel" styleClass="summary-label, income"
          text="INCOME"
          GridPane.halignment="CENTER"
@@ -40,7 +43,7 @@
          GridPane.rowIndex="0"
          GridPane.columnIndex="2"
          GridPane.hgrow="ALWAYS"
-        />
+  />
 
   <Label fx:id="expenseTotal" styleClass="summary, expenses"
          GridPane.halignment="CENTER"

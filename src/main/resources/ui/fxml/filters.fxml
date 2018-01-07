@@ -7,9 +7,11 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController"
             stylesheets="/ui/css/filters/filters.css">
 
-  <TitledPane text="Filters" collapsible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0"
-              AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
+  <TitledPane text="Filters" collapsible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
     <VBox spacing="20">
+      <padding>
+        <Insets bottom="5" top="10" right="15" left="15"/>
+      </padding>
 
       <HBox alignment="TOP_RIGHT">
         <Hyperlink fx:id="resetFilters" text="Reset filters"/>
@@ -34,6 +36,9 @@
         </Label>
 
         <HBox>
+          <VBox.margin>
+            <Insets bottom="10"/>
+          </VBox.margin>
           <Label fx:id="minAmount"/>
           <Pane HBox.hgrow="ALWAYS"/>
           <Label fx:id="maxAmount"/>
