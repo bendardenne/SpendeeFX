@@ -3,33 +3,39 @@ package spendee.ui.filters;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import spendee.model.Category;
 import spendee.model.DataStore;
 import spendee.model.EFilterType;
 import spendee.model.Transaction;
 import spendee.ui.StatusController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 public class FiltersController {
+
+  private static final Pattern HASHTAG = Pattern.compile( "#\\p{Alnum}+" );
+  private static final int MAXIMUM_HASHTAGS = 10;
 
   private DataStore dataStore = DataStore.getInstance();
 
   @FXML private TextField noteFilter;
   @FXML private MenuButton categoryFilter;
+  @FXML private FlowPane hashtagsList;
+  @FXML private Button clearButton;
 
   private StatusController statusController;
 
@@ -37,7 +43,47 @@ public class FiltersController {
     noteFilter.textProperty().addListener( ( observable, oldValue, newValue ) ->
                                                dataStore.filter( EFilterType.NOTE, makeRegexPredicate( newValue ) ) );
 
+    clearButton.setOnAction( e -> noteFilter.setText( "" ) );
+
+    dataStore.getTransactions().addListener( ( ListChangeListener<Transaction> ) c -> initializeHashtagsList() );
+
+
     initializeCategoryFilter();
+    initializeHashtagsList();
+  }
+
+  private void initializeHashtagsList() {
+    hashtagsList.getChildren().clear();
+
+    Map<String, Long> map = extractHashtags( dataStore.getTransactions() );
+
+    map.entrySet().stream()
+       .sorted( Collections.reverseOrder(
+           Comparator.comparingLong( Map.Entry::getValue ) ) )
+       .map( Map.Entry::getKey )
+       .limit( MAXIMUM_HASHTAGS )
+       .map( Hyperlink::new )
+       .forEach( link -> {
+         link.setOnAction( e -> noteFilter.setText( link.getText() ) );
+         hashtagsList.getChildren().add(link);
+       } );
+  }
+
+  private Map<String, Long> extractHashtags( ObservableList<? extends Transaction> aList ) {
+    return aList.stream()
+                .map( Transaction::getNote )
+                .map( this::extractHashtags )
+                .flatMap( List::stream )
+                .collect( groupingBy( Function.identity(), counting() ) );
+  }
+
+  private List<String> extractHashtags( String string ) {
+    List<String> found = new ArrayList<>();
+    Matcher matcher = HASHTAG.matcher( string );
+    while ( matcher.find() ) {
+      found.add( matcher.group() );
+    }
+    return found;
   }
 
   private Predicate<Transaction> makeRegexPredicate( String newValue ) {
@@ -100,8 +146,8 @@ public class FiltersController {
 
     selectAll.setOnAction( event -> {
       allEntries.stream()
-                     .map( CheckMenuItem.class::cast )
-                     .forEach( i -> i.setSelected( selectAll.isSelected() ) );
+                .map( CheckMenuItem.class::cast )
+                .forEach( i -> i.setSelected( selectAll.isSelected() ) );
       setupCategoryFilter.handle( event );
     } );
 

@@ -1,13 +1,30 @@
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.MenuButton?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController"
+            stylesheets="/ui/css/filters/filters.css">
   <TitledPane text="Filters" collapsible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0"
               AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
     <VBox spacing="20">
-      <MenuButton fx:id="categoryFilter" maxWidth="Infinity" />
-      <TextField fx:id="noteFilter" promptText="Note"/>
+      <MenuButton fx:id="categoryFilter" maxWidth="Infinity"/>
+
+      <VBox>
+        <StackPane>
+          <TextField fx:id="noteFilter" promptText="Note"/>
+          <Button fx:id="clearButton" styleClass="clear-button" StackPane.alignment="CENTER_RIGHT">
+            <graphic>
+              <ImageView pickOnBounds="true" preserveRatio="true">
+                <Image url="/ui/icons/clear.png"/>
+              </ImageView>
+            </graphic>
+          </Button>
+        </StackPane>
+        <FlowPane fx:id="hashtagsList" prefWrapLength="-Infinity"/>
+      </VBox>
     </VBox>
   </TitledPane>
 

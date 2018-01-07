@@ -1,0 +1,8 @@
+.clear-button {
+    -fx-background-color: transparent;
+    -fx-opacity: 0.2;
+}
+
+.clear-button:hover {
+    -fx-opacity: 0.8;
+}
