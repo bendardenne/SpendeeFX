@@ -1,5 +1,5 @@
 package spendee.model;
 
 public enum EFilterType {
-  NOTE, DATE, CATEGORY
+  NOTE, DATE, AMOUNT, CATEGORY
 }

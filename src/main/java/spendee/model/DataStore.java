@@ -37,8 +37,8 @@ public class DataStore {
   }
 
   private ObservableList<Transaction> backingStore = FXCollections.observableArrayList();
-  private ObservableMap<EFilterType, Predicate<Transaction>> filters = FXCollections.observableHashMap();
 
+  private ObservableMap<EFilterType, Predicate<Transaction>> filters = FXCollections.observableHashMap();
   private FilteredList<Transaction> transactions = new FilteredList<>( backingStore );
 
   private DataStore() {
@@ -53,8 +53,16 @@ public class DataStore {
     return transactions;
   }
 
+  public ObservableList<Transaction> getUnfilteredTransactions() {
+    return backingStore;
+  }
+
   public void setTransactions( List<Transaction> aTransactions ) {
     backingStore.setAll( aTransactions );
+  }
+
+  public void resetFilters() {
+    filters.clear();
   }
 
   public void filter( EFilterType aType, Predicate<Transaction> aPredicate ) {

@@ -189,7 +189,7 @@ public class ChartsController {
 
       separator.setPrefWidth( resultingBalance.getBoundsInParent().getWidth() );
 
-      label.setLineSpacing( 8 );
+      label.setLineSpacing( 5 );
       label.getChildren().addAll( category, date, note, amount,
                                   separator, new Text( "\n" ),
                                   resultingBalance );

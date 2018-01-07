@@ -5,12 +5,23 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.RangeSlider?>
+<?import javafx.scene.control.Label?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController"
             stylesheets="/ui/css/filters/filters.css">
   <TitledPane text="Filters" collapsible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0"
               AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
     <VBox spacing="20">
       <MenuButton fx:id="categoryFilter" maxWidth="Infinity"/>
+
+      <VBox>
+        <HBox>
+          <Label fx:id="minAmount"/>
+          <Pane HBox.hgrow="ALWAYS"/>
+          <Label fx:id="maxAmount"/>
+        </HBox>
+        <RangeSlider fx:id="amountFilter"/>
+      </VBox>
 
       <VBox>
         <StackPane>

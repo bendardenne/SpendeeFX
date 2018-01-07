@@ -8,6 +8,7 @@
 - Use Spendee icons?
 - Map categories to Spendee Colors
 - Style line in line chart for positive and negative balances
-- Introduce nested categories
+- Introduce nested categories (?) 
+- Allow clicking on pie slice to filter on that category 
 - Interpret entities in note fields (e.g. '  = \&#39;)
 - Deal with error handling (add logging)

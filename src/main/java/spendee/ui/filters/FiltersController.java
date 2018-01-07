@@ -3,6 +3,7 @@ package spendee.ui.filters;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import org.controlsfx.control.RangeSlider;
 import spendee.model.Category;
 import spendee.model.DataStore;
 import spendee.model.EFilterType;
@@ -33,13 +35,23 @@ public class FiltersController {
   private DataStore dataStore = DataStore.getInstance();
 
   @FXML private TextField noteFilter;
+  @FXML private RangeSlider amountFilter;
+  @FXML private Label minAmount;
+  @FXML private Label maxAmount;
   @FXML private MenuButton categoryFilter;
+
   @FXML private FlowPane hashtagsList;
   @FXML private Button clearButton;
 
   private StatusController statusController;
 
   @FXML public void initialize() {
+
+    dataStore.getUnfilteredTransactions().addListener( ( ListChangeListener<Transaction> ) c -> {
+      noteFilter.setText( "" );
+      initializeCategoryFilter();
+    } );
+
     noteFilter.textProperty().addListener( ( observable, oldValue, newValue ) ->
                                                dataStore.filter( EFilterType.NOTE, makeRegexPredicate( newValue ) ) );
 
@@ -47,9 +59,39 @@ public class FiltersController {
 
     dataStore.getTransactions().addListener( ( ListChangeListener<Transaction> ) c -> initializeHashtagsList() );
 
-
     initializeCategoryFilter();
+    initializeAmountFilter();
     initializeHashtagsList();
+  }
+
+  private void initializeAmountFilter() {
+    amountFilter.minProperty().bind( Bindings.createDoubleBinding(
+        () -> dataStore.getUnfilteredTransactions().stream().collect( summarizingDouble( Transaction::getAmount ) )
+                       .getMin(), dataStore.getUnfilteredTransactions() ) );
+    amountFilter.maxProperty().bind( Bindings.createDoubleBinding(
+        () -> dataStore.getUnfilteredTransactions().stream().collect( summarizingDouble(
+            Transaction::getAmount ) ).getMax(), dataStore.getUnfilteredTransactions() ) );
+
+    // Reset high and low when new data is loaded.
+    amountFilter.setHighValue( amountFilter.getMax() );
+    amountFilter.setLowValue( amountFilter.getMin() );
+    dataStore.getUnfilteredTransactions().addListener( new ListChangeListener<Transaction>() {
+      @Override public void onChanged( Change<? extends Transaction> c ) {
+        amountFilter.setHighValue( amountFilter.getMax() );
+        amountFilter.setLowValue( amountFilter.getMin() );
+      }
+    } );
+
+    // Update filter when high and low are changed.
+    ChangeListener<Number> updateAmountFilter = ( observable, oldValue, newValue ) ->
+        dataStore.filter( EFilterType.AMOUNT, t -> amountFilter.getLowValue() <= t.getAmount() &&
+                                                   t.getAmount() <= amountFilter.getHighValue() );
+
+    amountFilter.lowValueProperty().addListener( updateAmountFilter );
+    amountFilter.highValueProperty().addListener( updateAmountFilter );
+
+    minAmount.textProperty().bind( amountFilter.lowValueProperty().asString( "%.2f" ) );
+    maxAmount.textProperty().bind( amountFilter.highValueProperty().asString( "%.2f" ) );
   }
 
   private void initializeHashtagsList() {
@@ -65,7 +107,7 @@ public class FiltersController {
        .map( Hyperlink::new )
        .forEach( link -> {
          link.setOnAction( e -> noteFilter.setText( link.getText() ) );
-         hashtagsList.getChildren().add(link);
+         hashtagsList.getChildren().add( link );
        } );
   }
 
@@ -101,6 +143,7 @@ public class FiltersController {
 
   private void initializeCategoryFilter() {
     ObservableList<MenuItem> categories = categoryFilter.getItems();
+    categories.clear();
 
     CheckMenuItem selectAll = new CheckMenuItem( "All categories" );
     selectAll.setSelected( true );
