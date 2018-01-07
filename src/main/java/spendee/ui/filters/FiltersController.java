@@ -73,12 +73,12 @@ public class FiltersController {
     return aList.stream()
                 .map( Transaction::getNote )
                 .map( this::extractHashtags )
-                .flatMap( List::stream )
+                .flatMap( Collection::stream )
                 .collect( groupingBy( Function.identity(), counting() ) );
   }
 
-  private List<String> extractHashtags( String string ) {
-    List<String> found = new ArrayList<>();
+  private Collection<String> extractHashtags( String string ) {
+    Set<String> found = new HashSet<>();
     Matcher matcher = HASHTAG.matcher( string );
     while ( matcher.find() ) {
       found.add( matcher.group() );
