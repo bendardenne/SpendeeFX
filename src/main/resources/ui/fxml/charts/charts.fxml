@@ -12,6 +12,7 @@
           stylesheets="/ui/css/charts/charts.css">
 
   <DonutChart fx:id="incomeDonut"
+              animated="false"
               GridPane.columnIndex="0"
               GridPane.hgrow="SOMETIMES"
               GridPane.vgrow="SOMETIMES"/>

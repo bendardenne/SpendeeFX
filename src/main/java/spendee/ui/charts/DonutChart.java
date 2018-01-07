@@ -2,13 +2,13 @@ package spendee.ui.charts;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
-import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
@@ -31,6 +31,7 @@ public class DonutChart extends PieChart {
   public DonutChart() {
     innerCircle.getStyleClass().add( "inner-circle" );
     label.setTextAlignment( TextAlignment.CENTER );
+    label.setLineSpacing( 5 );
 
     pane.getChildren().addAll( innerCircle, label );
     pane.setMouseTransparent( true );
@@ -40,10 +41,24 @@ public class DonutChart extends PieChart {
         double value = slice.getPieValue();
 
         Text name = new Text( slice.getName() + "\n" );
-        Text amount = new Text( FORMATTER.format( value ) + "€\n" );
-        Text share = new Text( FORMATTER.format( 100 * slice.getPieValue() / totalValue.get() ) + "%" );
+        Text share = new Text( FORMATTER.format( 100 * slice.getPieValue() / totalValue.get() ) );
+        Text percent = new Text ("%\n");
+        Text amount = new Text( FORMATTER.format( value ) + "€" );
 
-        label.getChildren().addAll( name, amount, share );
+        // Font sizes not CSS through CSS so that the text scales with the size of the chart
+        // Use 75% of the available diameter and allow 10 characters
+        double nameSize = 0.75 * 2 * innerCircle.getRadius() / 10;
+        name.setFont( Font.font( nameSize ) );
+        share.setFont( Font.font(  nameSize ) );
+        percent.setFont( Font.font( 0.7 * nameSize ) );
+        amount.setFont( Font.font( 0.8 * nameSize ) );
+
+        name.getStyleClass().add( "pie-name-label" );
+        share.getStyleClass().add( "pie-share-label" );
+        percent.getStyleClass().add( "pie-share-label" );
+        amount.getStyleClass().add( "pie-amount-label" );
+
+        label.getChildren().addAll( name, share, percent, amount );
         label.setMinWidth( innerCircle.getRadius() * 1.8 );
       } ) );
 

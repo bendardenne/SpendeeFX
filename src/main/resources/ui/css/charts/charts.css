@@ -3,3 +3,12 @@
     -fx-stroke: white;
     -fx-stroke-width: 3;
 }
+
+.pie-name-label {
+    -fx-font-weight: bold;
+}
+
+.pie-amount-label {
+    -fx-fill: dimgray;
+    -fx-font-weight: lighter;
+}
