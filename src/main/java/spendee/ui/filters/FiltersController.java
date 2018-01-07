@@ -34,6 +34,8 @@ public class FiltersController {
 
   private DataStore dataStore = DataStore.getInstance();
 
+  @FXML private Hyperlink resetFilters;
+
   @FXML private TextField noteFilter;
   @FXML private RangeSlider amountFilter;
   @FXML private Label minAmount;
@@ -46,11 +48,8 @@ public class FiltersController {
   private StatusController statusController;
 
   @FXML public void initialize() {
-
-    dataStore.getUnfilteredTransactions().addListener( ( ListChangeListener<Transaction> ) c -> {
-      noteFilter.setText( "" );
-      initializeCategoryFilter();
-    } );
+    dataStore.getUnfilteredTransactions().addListener( ( ListChangeListener<Transaction> ) c -> resetFilters() );
+    resetFilters.setOnAction( e -> resetFilters() );
 
     noteFilter.textProperty().addListener( ( observable, oldValue, newValue ) ->
                                                dataStore.filter( EFilterType.NOTE, makeRegexPredicate( newValue ) ) );
@@ -64,6 +63,14 @@ public class FiltersController {
     initializeHashtagsList();
   }
 
+  private void resetFilters() {
+    noteFilter.setText( "" );
+    initializeCategoryFilter();
+
+    amountFilter.setHighValue( amountFilter.getMax() );
+    amountFilter.setLowValue( amountFilter.getMin() );
+  }
+
   private void initializeAmountFilter() {
     amountFilter.minProperty().bind( Bindings.createDoubleBinding(
         () -> dataStore.getUnfilteredTransactions().stream().collect( summarizingDouble( Transaction::getAmount ) )
@@ -72,15 +79,8 @@ public class FiltersController {
         () -> dataStore.getUnfilteredTransactions().stream().collect( summarizingDouble(
             Transaction::getAmount ) ).getMax(), dataStore.getUnfilteredTransactions() ) );
 
-    // Reset high and low when new data is loaded.
     amountFilter.setHighValue( amountFilter.getMax() );
     amountFilter.setLowValue( amountFilter.getMin() );
-    dataStore.getUnfilteredTransactions().addListener( new ListChangeListener<Transaction>() {
-      @Override public void onChanged( Change<? extends Transaction> c ) {
-        amountFilter.setHighValue( amountFilter.getMax() );
-        amountFilter.setLowValue( amountFilter.getMin() );
-      }
-    } );
 
     // Update filter when high and low are changed.
     ChangeListener<Number> updateAmountFilter = ( observable, oldValue, newValue ) ->
@@ -151,7 +151,7 @@ public class FiltersController {
     categories.add( selectAll );
     categories.add( new SeparatorMenuItem() );
 
-    Map<Category.Type, List<Category>> categoriesByType = dataStore.getTransactions().stream()
+    Map<Category.Type, List<Category>> categoriesByType = dataStore.getUnfilteredTransactions().stream()
                                                                    .map( Transaction::getCategory )
                                                                    .collect( groupingBy( Category::getType ) );
 

@@ -1,20 +1,38 @@
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.RangeSlider?>
-<?import javafx.scene.control.Label?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController"
             stylesheets="/ui/css/filters/filters.css">
+
   <TitledPane text="Filters" collapsible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0"
               AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
     <VBox spacing="20">
-      <MenuButton fx:id="categoryFilter" maxWidth="Infinity"/>
+
+      <HBox alignment="TOP_RIGHT">
+        <Hyperlink fx:id="resetFilters" text="Reset filters"/>
+      </HBox>
 
       <VBox>
+        <Label text="Categories" styleClass="filter-title">
+          <VBox.margin>
+            <Insets bottom="10"/>
+          </VBox.margin>
+        </Label>
+        <MenuButton fx:id="categoryFilter" maxWidth="Infinity"/>
+      </VBox>
+
+      <Separator/>
+
+      <VBox>
+        <Label text="Amount" styleClass="filter-title">
+          <VBox.margin>
+            <Insets bottom="10"/>
+          </VBox.margin>
+        </Label>
+
         <HBox>
           <Label fx:id="minAmount"/>
           <Pane HBox.hgrow="ALWAYS"/>
@@ -23,7 +41,15 @@
         <RangeSlider fx:id="amountFilter"/>
       </VBox>
 
+      <Separator/>
+
       <VBox>
+        <Label text="Note" styleClass="filter-title">
+          <VBox.margin>
+            <Insets bottom="10"/>
+          </VBox.margin>
+        </Label>
+
         <StackPane>
           <TextField fx:id="noteFilter" promptText="Note"/>
           <Button fx:id="clearButton" styleClass="clear-button" StackPane.alignment="CENTER_RIGHT">

@@ -1,3 +1,7 @@
+.filter-title {
+    -fx-text-fill: grey;
+}
+
 .clear-button {
     -fx-background-color: transparent;
     -fx-opacity: 0.2;
