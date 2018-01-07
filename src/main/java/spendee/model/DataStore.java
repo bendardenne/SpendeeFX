@@ -54,8 +54,7 @@ public class DataStore {
   }
 
   public void setTransactions( List<Transaction> aTransactions ) {
-    backingStore.clear();
-    backingStore.addAll( aTransactions );
+    backingStore.setAll( aTransactions );
   }
 
   public void filter( EFilterType aType, Predicate<Transaction> aPredicate ) {

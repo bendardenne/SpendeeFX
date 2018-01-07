@@ -17,7 +17,7 @@
   </center>
 
   <bottom>
-    <fx:include source="summary.fxml"/>
+    <fx:include source="transactions/summary.fxml"/>
   </bottom>
 
 </BorderPane>

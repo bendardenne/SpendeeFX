@@ -1,0 +1,24 @@
+.summary {
+    -fx-font-size: 40;
+}
+
+.expenses {
+    -fx-text-fill: #e35d6a;
+}
+
+.income {
+    -fx-text-fill: #5cb85c	;
+}
+
+.summary-label.income {
+    -fx-text-fill: #8AD38A	;
+}
+
+.summary-label.expenses {
+    -fx-text-fill: #F88994	;
+}
+
+.summary-label {
+    -fx-font-size: 12;
+    -fx-font-weight: bolder;
+}

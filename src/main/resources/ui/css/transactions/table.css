@@ -1,9 +1,9 @@
 .cell-amount-negative {
-    -fx-text-fill: #FF1111;
+    -fx-text-fill: #e35d6a;
 }
 
 .cell-amount-positive {
-    -fx-text-fill: #11FF11;
+    -fx-text-fill: #5cb85c;
 }
 
 .cell-amount-negative, .cell-amount-positive {

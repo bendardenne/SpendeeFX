@@ -44,7 +44,6 @@ public class CSVDecoder {
     Category category = new Category( strings.get( CATEGORY_COLUMN ),
                                       Category.Type.valueOf( strings.get( CATEGORY_TYPE_COLUMN ).toUpperCase() ) );
 
-    System.out.println(category.getName());
     return new Transaction( amount, comment, date, category );
 
   }
