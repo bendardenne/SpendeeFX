@@ -1,14 +1,13 @@
-- Add filters   (Date range: JFXtras)
+- Add date and amount filters (Date range: JFXtras)
+- Persist filters
+- Add Reset filters buttons 
 - Improve table style
-- Map categories to Spendee Colors
-- Use Spendee icons?
 - Add a configurable initial wallet value
-- Add controls on the line chart and adapt time-filter based on that (would be awesome)  (cf JFXutils)
-- Deal with error handling (add logging)
+- Hashtag autocomplete
+- Allow clicking on Hashtags on line labels
+- Use Spendee icons?
+- Map categories to Spendee Colors
 - Style line in line chart for positive and negative balances
 - Introduce nested categories
 - Interpret entities in note fields (e.g. '  = \&#39;)
-- Clickable hashtags 
-- Suggestion of hashtags in filter (often used)
-- Persist filters
-- Allow hover on pie slices and series points
+- Deal with error handling (add logging)

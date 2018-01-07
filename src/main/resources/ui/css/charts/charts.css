@@ -12,3 +12,20 @@
     -fx-fill: dimgray;
     -fx-font-weight: lighter;
 }
+
+.line-name-label {
+    -fx-font-weight: bold;
+}
+
+.line-date-label {
+    -fx-fill: dimgray;
+    -fx-font-weight: lighter;
+}
+
+.expense {
+    -fx-fill: #e35d6a;
+}
+
+.income {
+    -fx-fill: #5cb85c;
+}

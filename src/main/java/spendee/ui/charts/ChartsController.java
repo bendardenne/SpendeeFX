@@ -8,12 +8,22 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
+import org.gillius.jfxutils.chart.ChartPanManager;
+import org.gillius.jfxutils.chart.JFXChartUtil;
 import spendee.model.Category;
 import spendee.model.DataStore;
 import spendee.model.Transaction;
 
+import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -30,10 +40,13 @@ import static java.util.stream.Collectors.toList;
 
 public class ChartsController {
 
+  private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern( "MMM dd" );
+  private static final DecimalFormat AMOUNT_FORMATTER = new DecimalFormat( "+#####€;-#####€" );
+
   @FXML private DonutChart incomeDonut;
   @FXML private DonutChart expenseDonut;
 
-  @FXML private LineChart<Number, Number> timeSeries;
+  @FXML private LineChart<Long, Double> timeSeries;
   @FXML private NumberAxis xAxis;
   @FXML private NumberAxis yAxis;
 
@@ -50,10 +63,12 @@ public class ChartsController {
     xAxis.setAutoRanging( true );
     xAxis.setForceZeroInRange( false );
 
+    // Use FXUtils Stable Axis thing ??
     xAxis.setTickLabelFormatter( new StringConverter<Number>() {
       @Override public String toString( Number object ) {
-        ZonedDateTime dateTime = ZonedDateTime.ofInstant( Instant.ofEpochMilli( object.longValue() ), ZoneId.systemDefault() );
-        return DateTimeFormatter.ofPattern( "MMM dd" ).format( dateTime );
+        ZonedDateTime dateTime = ZonedDateTime
+            .ofInstant( Instant.ofEpochMilli( object.longValue() ), ZoneId.systemDefault() );
+        return DATE_TIME_FORMATTER.format( dateTime );
       }
 
       @Override public Number fromString( String string ) {
@@ -61,6 +76,29 @@ public class ChartsController {
       }
     } );
 
+    // Zoom only with mouse wheel
+    JFXChartUtil.setupZooming( timeSeries, mouseEvent -> {
+      if ( mouseEvent.getButton() != MouseButton.MIDDLE ) {
+        mouseEvent.consume();
+      }
+    } );
+
+    timeSeries.setOnScroll( e -> {
+      ObservableList<XYChart.Data<Long, Double>> dataPoint = timeSeries.getData().get( 0 ).getData();
+
+      // Prevent zooming out further than makes sense
+      if ( e.getDeltaY() < 0 && dataPoint.size() > 0 ) {
+        if ( xAxis.getLowerBound() < dataPoint.get( 0 ).getXValue() &&
+             xAxis.getUpperBound() > dataPoint.get( dataPoint.size() - 1 ).getXValue() &&
+             yAxis.getLowerBound() < dataPoint.get( 0 ).getYValue() &&
+            yAxis.getUpperBound() > dataPoint.get( dataPoint.size() - 1 ).getYValue() ) {
+          e.consume();
+        }
+      }
+    } );
+
+    ChartPanManager panManager = new ChartPanManager( timeSeries );
+    panManager.start();
   }
 
   private void updateCharts( ObservableList<? extends Transaction> aTransactions ) {
@@ -76,19 +114,24 @@ public class ChartsController {
     timeSeries.setData( FXCollections.singletonObservableList( makeBalanceSeries( aTransactions.stream() ) ) );
   }
 
-  private XYChart.Series<Number, Number> makeBalanceSeries( Stream<? extends Transaction> aStream ) {
-    XYChart.Series<Number, Number> series = new XYChart.Series<>();
+  private XYChart.Series<Long, Double> makeBalanceSeries( Stream<? extends Transaction> aStream ) {
+    XYChart.Series<Long, Double> series = new XYChart.Series<>();
     series.setName( "Balance" );
 
     DoubleAdder acc = new DoubleAdder();
 
-    List<Pair<Number, Double>> balances = aStream.sorted( Comparator.comparing( Transaction::getDate ) ).map( i -> {
-      acc.add( i.getAmount() );
-      return new Pair<>( (Number) i.getDate().toInstant().toEpochMilli(), acc.sum() );
-    } ).collect( Collectors.toList() );
+    List<Pair<Transaction, Double>> balances = aStream.sorted( Comparator.comparing( Transaction::getDate ) )
+                                                      .map( transaction -> {
+                                                        acc.add( transaction.getAmount() );
+                                                        return new Pair<Transaction, Double>( transaction, acc.sum() );
+                                                      } ).collect( Collectors.toList() );
 
-    for ( Pair<Number, Double> balance : balances ) {
-      series.getData().add( new LineChart.Data<>( balance.getKey(), balance.getValue() ) );
+    for ( Pair<Transaction, Double> balance : balances ) {
+      Transaction transaction = balance.getKey();
+      XYChart.Data<Long, Double> dataPoint = new LineChart.Data<>( transaction.getDate().toInstant().toEpochMilli(),
+                                                                     balance.getValue() );
+      dataPoint.setNode( new HoverNode( transaction, balance.getValue() ) );
+      series.getData().add( dataPoint );
     }
 
     return series;
@@ -105,5 +148,57 @@ public class ChartsController {
                            .sorted( Collections.reverseOrder( Comparator.comparingDouble( Map.Entry::getValue ) ) )
                            .map( entry -> new PieChart.Data( entry.getKey().getName(), entry.getValue() ) )
                            .collect( toList() );
+  }
+
+  private class HoverNode extends StackPane {
+
+    private TextFlow label;
+
+    private HoverNode( Transaction aTransaction, double aValue ) {
+      setPrefSize( 10, 10 );
+      createLabel( aTransaction, aValue );
+
+      setOnMouseEntered( event -> {
+        getChildren().setAll( label );
+        toFront();
+      } );
+
+      setOnMouseExited( e -> {
+        getChildren().clear();
+      } );
+    }
+
+    private void createLabel( Transaction aTransaction, double aValue ) {
+      label = new TextFlow();
+
+      Text category = new Text( aTransaction.getCategory().getName() + "\n" );
+      category.getStyleClass().add( "line-name-label" );
+
+      Text date = new Text( DATE_TIME_FORMATTER.format( aTransaction.getDate() ) + "\n" );
+      date.getStyleClass().add( "line-date-label" );
+
+      Text amount = new Text( AMOUNT_FORMATTER.format( aTransaction.getAmount() ) + "\n" );
+      amount.getStyleClass().add( aTransaction.getCategory().getType().toString().toLowerCase() );
+
+      Text note = new Text( aTransaction.getNote().isEmpty() ? "" : aTransaction.getNote() + "\n" );
+
+      Separator separator = new Separator();
+
+      Text resultingBalance = new Text( AMOUNT_FORMATTER.format( aValue ) );
+      resultingBalance.getStyleClass().add( aValue > 0 ? "income" : "expense" );
+
+      separator.setPrefWidth( resultingBalance.getBoundsInParent().getWidth() );
+
+      label.setLineSpacing( 8 );
+      label.getChildren().addAll( category, date, note, amount,
+                                  separator, new Text( "\n" ),
+                                  resultingBalance );
+
+      label.getStyleClass().addAll( "default-color0", "chart-line-symbol", "chart-series-line" );
+      label.setTextAlignment( TextAlignment.CENTER );
+      label.setMouseTransparent( true );
+      label.setMinSize( Label.USE_PREF_SIZE, Label.USE_PREF_SIZE );
+      label.setTranslateY( 70 );
+    }
   }
 }

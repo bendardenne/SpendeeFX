@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.layout.*?>
@@ -30,7 +29,7 @@
              GridPane.hgrow="SOMETIMES"
              GridPane.vgrow="SOMETIMES">
     <xAxis>
-      <NumberAxis fx:id="xAxis" forceZeroInRange="false" />
+      <NumberAxis fx:id="xAxis" forceZeroInRange="false"/>
     </xAxis>
     <yAxis>
       <NumberAxis fx:id="yAxis" forceZeroInRange="false" side="LEFT"/>
