@@ -1,5 +1,6 @@
 package spendee.ui.filters;
 
+import impl.org.controlsfx.autocompletion.SuggestionProvider;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -11,12 +12,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import jfxtras.scene.control.CalendarPicker;
 import org.controlsfx.control.RangeSlider;
+import org.controlsfx.control.textfield.TextFields;
 import spendee.model.Category;
 import spendee.model.DataStore;
 import spendee.model.EFilterType;
 import spendee.model.Transaction;
 import spendee.ui.StatusController;
+import spendee.util.DateUtil;
 
 import java.util.*;
 import java.util.function.Function;
@@ -42,10 +46,16 @@ public class FiltersController {
   @FXML private Label maxAmount;
   @FXML private MenuButton categoryFilter;
 
+  @FXML private CalendarPicker dateFilter;
+  @FXML private Label dateLabel;
+
   @FXML private FlowPane hashtagsList;
   @FXML private Button clearButton;
 
+  @FXML private Label shownTransactions;
+
   private StatusController statusController;
+  private SuggestionProvider<String> hashtagProvider;
 
   @FXML public void initialize() {
     dataStore.getUnfilteredTransactions().addListener( ( ListChangeListener<Transaction> ) c -> resetFilters() );
@@ -54,16 +64,45 @@ public class FiltersController {
     noteFilter.textProperty().addListener( ( observable, oldValue, newValue ) ->
                                                dataStore.filter( EFilterType.NOTE, makeRegexPredicate( newValue ) ) );
 
+    // Will be populated later.
+    hashtagProvider = SuggestionProvider.create( Collections.emptyList() );
+    TextFields.bindAutoCompletion( noteFilter, hashtagProvider );
+
     clearButton.setOnAction( e -> noteFilter.setText( "" ) );
 
     dataStore.getTransactions().addListener( ( ListChangeListener<Transaction> ) c -> initializeHashtagsList() );
 
     initializeCategoryFilter();
     initializeAmountFilter();
+    initializeDateFilter();
     initializeHashtagsList();
+
+    shownTransactions.textProperty().bind( Bindings.format( "Showing %d of %d transactions",
+                                                            Bindings.size( dataStore.getTransactions() ),
+                                                            Bindings.size( dataStore.getUnfilteredTransactions() ) ) );
   }
 
+  private void initializeDateFilter() {
+    dateLabel.textProperty().bind( Bindings.createStringBinding(
+        () -> DateUtil.prettyDate( dateFilter.calendars() ), dateFilter.calendars() ) );
+
+    dateFilter.calendars().addListener( ( ListChangeListener<Calendar> ) c -> {
+      ObservableList<? extends Calendar> dates = c.getList().sorted();
+      if ( dates.size() == 0 ) {
+        dataStore.filter( EFilterType.DATE, t -> true );
+      }
+      else {
+        dataStore.filter( EFilterType.DATE, t -> dates.stream().map( DateUtil::toLocalDate )
+                                                      .anyMatch( t.getDate().toLocalDate()::equals ));
+      }
+    } );
+  }
+
+
+
   private void resetFilters() {
+    dataStore.resetFilters();
+
     noteFilter.setText( "" );
     initializeCategoryFilter();
 
@@ -92,6 +131,7 @@ public class FiltersController {
 
     minAmount.textProperty().bind( amountFilter.lowValueProperty().asString( "%.2f" ) );
     maxAmount.textProperty().bind( amountFilter.highValueProperty().asString( "%.2f" ) );
+
   }
 
   private void initializeHashtagsList() {
@@ -109,6 +149,9 @@ public class FiltersController {
          link.setOnAction( e -> noteFilter.setText( link.getText() ) );
          hashtagsList.getChildren().add( link );
        } );
+
+    hashtagProvider.clearSuggestions();
+    hashtagProvider.addPossibleSuggestions( map.keySet() );
   }
 
   private Map<String, Long> extractHashtags( ObservableList<? extends Transaction> aList ) {

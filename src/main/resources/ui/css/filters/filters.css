@@ -10,3 +10,26 @@
 .clear-button:hover {
     -fx-opacity: 0.8;
 }
+
+.toggle-button:selected {
+    -fx-background-color: lightskyblue;
+}
+
+.today-button {
+    -fx-background-color: lightgrey;
+}
+
+.toggle-button {
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+
+    -fx-label-padding: 0.2em 0.2em 0.2em 0.2em;
+}
+
+.toggle-button.today {
+    -fx-background-color: lightgrey;
+}
+
+.shown-transactions {
+    -fx-font-size: 18px;
+}

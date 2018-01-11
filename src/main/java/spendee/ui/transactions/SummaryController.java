@@ -25,6 +25,7 @@ public class SummaryController {
     ObservableList<Transaction> transactions = dataStore.getTransactions();
     DecimalFormat formatter = new DecimalFormat( "#.##" );
 
+
     incomeTotal.textProperty().bind( Bindings.createStringBinding(
         () -> formatter.format( transactions
                                     .stream()
@@ -47,19 +48,20 @@ public class SummaryController {
                                     .sum() ), transactions ) );
 
     StringBinding positiveBalance = Bindings.createStringBinding( () -> transactions
-                                                                 .stream()
-                                                                 .mapToDouble( Transaction::getAmount )
-                                                                 .sum() > 0 ? "income" : "expenses", transactions );
+                                                                            .stream()
+                                                                            .mapToDouble( Transaction::getAmount )
+                                                                            .sum() > 0 ? "income" : "expenses",
+                                                                  transactions );
 
-    balance.getStyleClass().add(positiveBalance.getValue());
-    balanceLabel.getStyleClass().add(positiveBalance.getValue());
+    balance.getStyleClass().add( positiveBalance.getValue() );
+    balanceLabel.getStyleClass().add( positiveBalance.getValue() );
 
     transactions.addListener( ( ListChangeListener<Transaction> ) c -> {
       balance.getStyleClass().removeAll( "income", "expenses" );
       balanceLabel.getStyleClass().removeAll( "income", "expenses" );
 
-      balance.getStyleClass().add(positiveBalance.getValue());
-      balanceLabel.getStyleClass().add(positiveBalance.getValue());
+      balance.getStyleClass().add( positiveBalance.getValue() );
+      balanceLabel.getStyleClass().add( positiveBalance.getValue() );
     } );
   }
 

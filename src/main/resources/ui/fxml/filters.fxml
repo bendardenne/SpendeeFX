@@ -1,8 +1,9 @@
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import jfxtras.scene.control.CalendarPicker?>
 <?import org.controlsfx.control.RangeSlider?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController"
             stylesheets="/ui/css/filters/filters.css">
@@ -49,6 +50,21 @@
       <Separator/>
 
       <VBox>
+        <Label text="Date" styleClass="filter-title">
+          <VBox.margin>
+            <Insets bottom="10"/>
+          </VBox.margin>
+        </Label>
+
+        <CalendarPicker fx:id="dateFilter"  mode="RANGE"/>
+        <HBox alignment="CENTER">
+          <Label fx:id="dateLabel" />
+        </HBox>
+      </VBox>
+
+      <Separator/>
+
+      <VBox>
         <Label text="Note" styleClass="filter-title">
           <VBox.margin>
             <Insets bottom="10"/>
@@ -67,6 +83,11 @@
         </StackPane>
         <FlowPane fx:id="hashtagsList" prefWrapLength="-Infinity"/>
       </VBox>
+
+      <HBox VBox.vgrow="ALWAYS" alignment="BOTTOM_CENTER" >
+        <Label fx:id="shownTransactions" styleClass="shown-transactions" />
+      </HBox>
+
     </VBox>
   </TitledPane>
 
