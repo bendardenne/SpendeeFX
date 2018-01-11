@@ -23,6 +23,7 @@ import org.gillius.jfxutils.chart.JFXChartUtil;
 import spendee.model.Category;
 import spendee.model.DataStore;
 import spendee.model.Transaction;
+import spendee.ui.CssClassProvider;
 
 import java.text.DecimalFormat;
 import java.time.Instant;
@@ -89,10 +90,11 @@ public class ChartsController {
 
       // Prevent zooming out further than makes sense
       if ( e.getDeltaY() < 0 && dataPoint.size() > 0 ) {
-        if ( xAxis.getLowerBound() < dataPoint.get( 0 ).getXValue() &&
-             xAxis.getUpperBound() > dataPoint.get( dataPoint.size() - 1 ).getXValue() &&
-             yAxis.getLowerBound() < dataPoint.get( 0 ).getYValue() &&
-            yAxis.getUpperBound() > dataPoint.get( dataPoint.size() - 1 ).getYValue() ) {
+        //FIXME not correct
+        if ( xAxis.getLowerBound() <= dataPoint.get( 0 ).getXValue() &&
+             xAxis.getUpperBound() >= dataPoint.get( dataPoint.size() - 1 ).getXValue() &&
+             yAxis.getLowerBound() <= dataPoint.get( 0 ).getYValue() &&
+            yAxis.getUpperBound() >= dataPoint.get( dataPoint.size() - 1 ).getYValue() ) {
           e.consume();
         }
       }
@@ -109,15 +111,21 @@ public class ChartsController {
     List<PieChart.Data> incomeData = makePieData( incomes );
     List<PieChart.Data> expenseData = makePieData( expenses );
 
+
     incomeDonut.setData( FXCollections.observableList( incomeData ) );
     expenseDonut.setData( FXCollections.observableList( expenseData ) );
+
+    incomeData.forEach(
+        slice -> slice.getNode().getStyleClass().add( CssClassProvider.getCssClass( slice.getName() ) ) );
+
+    expenseData.forEach(
+        slice -> slice.getNode().getStyleClass().add( CssClassProvider.getCssClass( slice.getName() ) ) );
 
     timeSeries.setData( FXCollections.singletonObservableList( makeBalanceSeries( aTransactions.stream() ) ) );
   }
 
   private XYChart.Series<Long, Double> makeBalanceSeries( Stream<? extends Transaction> aStream ) {
     XYChart.Series<Long, Double> series = new XYChart.Series<>();
-    series.setName( "Balance" );
 
     DoubleAdder acc = new DoubleAdder();
 
@@ -156,8 +164,14 @@ public class ChartsController {
     private TextFlow label = new TextFlow(  );
 
     private HoverNode( Transaction aTransaction, double aValue ) {
-      setPrefSize( 10, 10 );
       createLabel( aTransaction, aValue );
+
+      setPrefSize( 10, 10 );
+
+      String transactionColor = aTransaction.getAmount() < 0 ? "default-color6" : "default-color2";
+
+      getStyleClass().addAll( transactionColor, "chart-line-symbol", "chart-series-line" );
+      label.getStyleClass().addAll( transactionColor, "chart-line-symbol", "chart-series-line" );
 
       setOnMouseEntered( event -> {
         getChildren().setAll( label );
@@ -192,7 +206,6 @@ public class ChartsController {
                                   separator, new Text( "\n" ),
                                   resultingBalance );
 
-      label.getStyleClass().addAll( "default-color0", "chart-line-symbol", "chart-series-line" );
       label.setLineSpacing( 5 );
       label.setPadding( new Insets( 10,10,10,10) );
       label.setTextAlignment( TextAlignment.CENTER );

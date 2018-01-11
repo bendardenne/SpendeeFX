@@ -12,17 +12,20 @@
 
   <DonutChart fx:id="incomeDonut"
               animated="false"
+              legendVisible="false"
               GridPane.columnIndex="0"
               GridPane.hgrow="SOMETIMES"
               GridPane.vgrow="SOMETIMES"/>
 
   <DonutChart fx:id="expenseDonut"
               animated="false"
+              legendVisible="false"
               GridPane.columnIndex="1"
               GridPane.hgrow="SOMETIMES"
               GridPane.vgrow="SOMETIMES"/>
 
   <LineChart fx:id="timeSeries"
+             animated="false"
              legendVisible="false"
              GridPane.rowIndex="1"
              GridPane.columnSpan="2"
