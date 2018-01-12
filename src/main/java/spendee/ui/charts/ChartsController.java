@@ -58,9 +58,7 @@ public class ChartsController {
     ObservableList<Transaction> transactions = dataStore.getTransactions();
     updateCharts( transactions );
 
-    transactions.addListener( ( ListChangeListener<? super Transaction> ) ( e ) -> {
-      updateCharts( e.getList() );
-    } );
+    transactions.addListener( ( ListChangeListener<? super Transaction> ) ( e ) -> updateCharts( e.getList() ) );
 
     xAxis.setAutoRanging( true );
     xAxis.setForceZeroInRange( false );
@@ -178,9 +176,7 @@ public class ChartsController {
         toFront();
       } );
 
-      setOnMouseExited( e -> {
-        getChildren().clear();
-      } );
+      setOnMouseExited( e -> getChildren().clear() );
     }
 
     private void createLabel( Transaction aTransaction, double aValue ) {

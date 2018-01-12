@@ -1,0 +1,35 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController"
+            stylesheets="/ui/css/filters/filters.css">
+
+  <TitledPane text="Filters" collapsible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
+    <VBox spacing="20">
+      <padding>
+        <Insets bottom="5" top="10" right="15" left="15"/>
+      </padding>
+
+      <HBox alignment="TOP_RIGHT">
+        <Hyperlink fx:id="resetFilters" text="Reset filters"/>
+      </HBox>
+
+      <fx:include fx:id="categoryFilter" source="categoryFilter.fxml"/>
+      <Separator/>
+      <fx:include fx:id="amountFilter" source="amountFilter.fxml"/>
+      <Separator/>
+      <fx:include fx:id="dateFilter" source="dateFilter.fxml"/>
+      <Separator/>
+      <fx:include fx:id="noteFilter" source="noteFilter.fxml"/>
+      <Separator/>
+      <fx:include fx:id="scriptingFilter" source="scriptingFilter.fxml"/>
+      <Separator/>
+
+      <HBox VBox.vgrow="ALWAYS" alignment="BOTTOM_CENTER">
+        <Label fx:id="shownTransactions" styleClass="shown-transactions"/>
+      </HBox>
+
+    </VBox>
+  </TitledPane>
+
+</AnchorPane>

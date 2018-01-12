@@ -1,4 +1,4 @@
-- Add date filter (Date range: JFXtras)
+- Scripting filter : try to introduce autocompletation
 - Persist filters
 - Improve table style
 - Add a configurable initial wallet value

@@ -1,0 +1,49 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import jfxtras.scene.control.CalendarPicker?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.DateFilter">
+  <Label text="Date" styleClass="filter-title">
+    <VBox.margin>
+      <Insets bottom="20"/>
+    </VBox.margin>
+  </Label>
+
+  <HBox fx:id="dateContainer" alignment="CENTER">
+    <VBox.margin>
+      <Insets bottom="10"/>
+    </VBox.margin>
+
+    <Hyperlink fx:id="thisMonth"
+               HBox.hgrow="ALWAYS"
+               maxWidth="${dateContainer.width * 0.3}"
+               alignment="CENTER"
+               text="This month"/>
+
+    <Separator orientation="VERTICAL"/>
+
+    <Hyperlink fx:id="thisYear"
+               HBox.hgrow="ALWAYS"
+               maxWidth="${dateContainer.width * 0.3}"
+               alignment="CENTER"
+               text="This year"/>
+
+    <Separator orientation="VERTICAL"/>
+
+    <Hyperlink fx:id="allTime"
+               HBox.hgrow="ALWAYS"
+               maxWidth="${dateContainer.width * 0.3}"
+               alignment="CENTER"
+               text="All time"/>
+  </HBox>
+
+  <CalendarPicker fx:id="dateFilter" mode="RANGE">
+    <VBox.margin>
+      <Insets bottom="-20"/>
+    </VBox.margin>
+  </CalendarPicker>
+
+  <HBox alignment="CENTER" VBox.vgrow="NEVER">
+    <Label fx:id="dateLabel"/>
+  </HBox>
+</VBox>

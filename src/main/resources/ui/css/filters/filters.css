@@ -22,8 +22,7 @@
 .toggle-button {
     -fx-background-radius: 0;
     -fx-background-color: transparent;
-
-    -fx-label-padding: 0.2em 0.2em 0.2em 0.2em;
+    -fx-min-width: 2em;
 }
 
 .toggle-button.today {
@@ -32,4 +31,13 @@
 
 .shown-transactions {
     -fx-font-size: 18px;
+    -fx-text-fill: grey;
+}
+
+.hyperlink {
+    -fx-border-color: transparent;
+}
+
+.hyperlink:visited {
+    -fx-text-fill: inherit;
 }

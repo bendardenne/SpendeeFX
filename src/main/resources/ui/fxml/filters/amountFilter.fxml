@@ -1,0 +1,21 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.RangeSlider?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.AmountFilter">
+  <Label text="Amount" styleClass="filter-title">
+    <VBox.margin>
+      <Insets bottom="10"/>
+    </VBox.margin>
+  </Label>
+
+  <HBox>
+    <VBox.margin>
+      <Insets bottom="10"/>
+    </VBox.margin>
+    <Label fx:id="minAmount"/>
+    <Pane HBox.hgrow="ALWAYS"/>
+    <Label fx:id="maxAmount"/>
+  </HBox>
+  <RangeSlider fx:id="amountFilter"/>
+</VBox>

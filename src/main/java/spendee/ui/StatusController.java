@@ -27,7 +27,7 @@ public class StatusController {
       @Override public void run() {
         Platform.runLater( () -> statusBar.setText( "" ) );
       }
-    }, 5000 );
+    }, 2000 );
   }
 
 }

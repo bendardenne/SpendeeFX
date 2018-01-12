@@ -7,7 +7,7 @@
   </top>
 
   <left>
-    <fx:include fx:id="filters" source="filters.fxml" />
+    <fx:include fx:id="filters" source="filters/filters.fxml" />
   </left>
 
   <center>

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public final class DateUtil {
 
   private static final SimpleDateFormat SINGLE_DAY = new SimpleDateFormat( "MMM dd" );
-  private static final SimpleDateFormat WHOLE_MONTH = new SimpleDateFormat( "MMM YYYY" );
+  private static final SimpleDateFormat WHOLE_MONTH = new SimpleDateFormat( "MMMM YYYY" );
 
   public static LocalDate toLocalDate( Calendar aCalendar ) {
     return LocalDateTime.ofInstant( aCalendar.toInstant(), ZoneId.systemDefault() ).toLocalDate();
@@ -33,8 +33,7 @@ public final class DateUtil {
         TimeUnit.DAYS.convert( lastDay.getTimeInMillis() - firstDay.getTimeInMillis(), TimeUnit.MILLISECONDS ) + 1;
 
     // Check whole month
-    if ( firstDay.get( Calendar.DAY_OF_MONTH ) == firstDay.getActualMinimum( Calendar.DAY_OF_MONTH ) &&
-         days == firstDay.getActualMaximum( Calendar.DAY_OF_MONTH ) ) {
+    if ( firstDay.get( Calendar.DAY_OF_MONTH ) == 1 && days == firstDay.getActualMaximum( Calendar.DAY_OF_MONTH ) ) {
       return WHOLE_MONTH.format( aCalendars.get( 0 ).getTime() );
     }
 
@@ -42,7 +41,7 @@ public final class DateUtil {
       return "Week of " + SINGLE_DAY.format( aCalendars.get( 0 ).getTime() );
     }
 
-    return days + "selected";
+    return days + " days selected";
   }
 
 }
