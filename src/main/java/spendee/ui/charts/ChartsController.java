@@ -92,7 +92,7 @@ public class ChartsController {
         if ( xAxis.getLowerBound() <= dataPoint.get( 0 ).getXValue() &&
              xAxis.getUpperBound() >= dataPoint.get( dataPoint.size() - 1 ).getXValue() &&
              yAxis.getLowerBound() <= dataPoint.get( 0 ).getYValue() &&
-            yAxis.getUpperBound() >= dataPoint.get( dataPoint.size() - 1 ).getYValue() ) {
+             yAxis.getUpperBound() >= dataPoint.get( dataPoint.size() - 1 ).getYValue() ) {
           e.consume();
         }
       }
@@ -136,7 +136,7 @@ public class ChartsController {
     for ( Pair<Transaction, Double> balance : balances ) {
       Transaction transaction = balance.getKey();
       XYChart.Data<Long, Double> dataPoint = new LineChart.Data<>( transaction.getDate().toInstant().toEpochMilli(),
-                                                                     balance.getValue() );
+                                                                   balance.getValue() );
       dataPoint.setNode( new HoverNode( transaction, balance.getValue() ) );
       series.getData().add( dataPoint );
     }
@@ -159,7 +159,7 @@ public class ChartsController {
 
   private class HoverNode extends StackPane {
 
-    private TextFlow label = new TextFlow(  );
+    private TextFlow label = new TextFlow();
 
     private HoverNode( Transaction aTransaction, double aValue ) {
       createLabel( aTransaction, aValue );
@@ -203,7 +203,7 @@ public class ChartsController {
                                   resultingBalance );
 
       label.setLineSpacing( 5 );
-      label.setPadding( new Insets( 10,10,10,10) );
+      label.setPadding( new Insets( 10, 10, 10, 10 ) );
       label.setTextAlignment( TextAlignment.CENTER );
       label.setMinSize( Label.USE_PREF_SIZE, Label.USE_PREF_SIZE );
       label.setTranslateY( 70 );

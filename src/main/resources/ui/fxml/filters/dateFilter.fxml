@@ -11,7 +11,7 @@
 
   <HBox fx:id="dateContainer" alignment="CENTER">
     <VBox.margin>
-      <Insets bottom="10"/>
+      <Insets bottom="10" left="-10"/>
     </VBox.margin>
 
     <Hyperlink fx:id="thisMonth"
@@ -30,11 +30,37 @@
 
     <Separator orientation="VERTICAL"/>
 
+    <Pane HBox.hgrow="ALWAYS" maxWidth="${dateContainer.width * 0.3}"/>
+
+  </HBox>
+
+  <HBox fx:id="dateContainer2" alignment="CENTER">
+    <VBox.margin>
+      <Insets bottom="10" left="-10"/>
+    </VBox.margin>
+
+    <Hyperlink fx:id="lastMonth"
+               HBox.hgrow="ALWAYS"
+               maxWidth="${dateContainer2.width * 0.3}"
+               alignment="CENTER"
+               text="Last month"/>
+
+    <Separator orientation="VERTICAL"/>
+
+    <Hyperlink fx:id="lastYear"
+               HBox.hgrow="ALWAYS"
+               maxWidth="${dateContainer2.width * 0.3}"
+               alignment="CENTER"
+               text="Last year"/>
+
+    <Separator orientation="VERTICAL"/>
+
     <Hyperlink fx:id="allTime"
                HBox.hgrow="ALWAYS"
-               maxWidth="${dateContainer.width * 0.3}"
+               maxWidth="${dateContainer2.width * 0.3}"
                alignment="CENTER"
                text="All time"/>
+
   </HBox>
 
   <CalendarPicker fx:id="dateFilter" mode="RANGE">

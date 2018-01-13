@@ -27,7 +27,7 @@ public class ScriptingFilter implements IFilterController {
 
     clearButton.setOnAction( e -> reset() );
 
-    ScriptEngine scriptEngine = new NashornScriptEngineFactory().getScriptEngine( "--language=es6");
+    ScriptEngine scriptEngine = new NashornScriptEngineFactory().getScriptEngine( "--language=es6" );
     scriptingFilter.textProperty().addListener( ( observable, oldValue, newValue ) -> {
       try {
         Predicate<Transaction> predicate = ( Predicate<Transaction> )

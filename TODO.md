@@ -1,4 +1,4 @@
-- Scripting filter : try to introduce autocompletation
+- Scripting filter : try to introduce autocompletion
 - Persist filters
 - Improve table style
 - Add a configurable initial wallet value

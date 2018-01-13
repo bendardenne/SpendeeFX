@@ -4,6 +4,7 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.layout.*?>
 <?import spendee.ui.charts.DonutChart?>
+<?import javafx.geometry.Insets?>
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="spendee.ui.charts.ChartsController"
@@ -31,6 +32,9 @@
              GridPane.columnSpan="2"
              GridPane.hgrow="SOMETIMES"
              GridPane.vgrow="SOMETIMES">
+    <padding>
+      <Insets left="10" right="10" />
+    </padding>
     <xAxis>
       <NumberAxis fx:id="xAxis" forceZeroInRange="false"/>
     </xAxis>

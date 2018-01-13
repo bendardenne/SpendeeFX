@@ -18,33 +18,44 @@ public class DateFilter implements IFilterController {
   @FXML private CalendarPicker dateFilter;
   @FXML private Hyperlink thisMonth;
   @FXML private Hyperlink thisYear;
+  @FXML private Hyperlink lastMonth;
+  @FXML private Hyperlink lastYear;
   @FXML private Hyperlink allTime;
   @FXML private Label dateLabel;
 
   private DataStore dataStore = DataStore.getInstance();
 
   @Override public void initialize() {
+    ObservableList<Calendar> selectedDates = dateFilter.calendars();
     dateLabel.textProperty().bind( Bindings.createStringBinding(
-        () -> DateUtil.prettyDate( dateFilter.calendars() ), dateFilter.calendars() ) );
+        () -> DateUtil.prettyDate( selectedDates.sorted() ), selectedDates ) );
 
-    dateFilter.calendars().addListener( ( ListChangeListener<Calendar> ) c -> {
+    selectedDates.addListener( ( ListChangeListener<Calendar> ) c -> {
       ObservableList<? extends Calendar> dates = c.getList().sorted();
       if ( dates.size() == 0 ) {
         dataStore.filter( EFilterType.DATE, t -> true );
       }
       else {
-        dataStore.filter( EFilterType.DATE, t -> dates.stream().map( DateUtil::toLocalDate )
+        dataStore.filter( EFilterType.DATE, t -> dates.stream()
+                                                      .map( DateUtil::toLocalDate )
                                                       .anyMatch( t.getDate().toLocalDate()::equals ));
       }
     } );
 
-    thisMonth.setOnAction( e -> dateFilter.calendars().setAll( getCurrentMonth() ) );
-    thisYear.setOnAction( e -> dateFilter.calendars().setAll( getCurrentYear() ) );
+    int currentMonth = Calendar.getInstance().get( Calendar.MONTH );
+    int currentYear = Calendar.getInstance().get( Calendar.YEAR );
+
+    thisMonth.setOnAction( e -> selectedDates.setAll( getMonthList( currentMonth ) ) );
+    thisYear.setOnAction( e -> selectedDates.setAll( getYearList( currentYear ) ) );
+    lastMonth.setOnAction( e -> selectedDates.setAll( getMonthList( currentMonth - 1 ) ) );
+    lastYear.setOnAction( e -> selectedDates.setAll( getYearList( currentYear - 1 ) ) );
+
     allTime.setOnAction( e -> reset() );
   }
 
-  private Collection<Calendar> getCurrentYear() {
+  private Collection<Calendar> getYearList( int aYear ) {
     Calendar calendar = Calendar.getInstance( );
+    calendar.set( Calendar.YEAR, aYear );
     List<Calendar> calendars = new ArrayList<>(  );
 
     for( int i = 1; i <= calendar.getActualMaximum( Calendar.DAY_OF_YEAR ); i++ ){
@@ -55,9 +66,10 @@ public class DateFilter implements IFilterController {
     return calendars;
   }
 
-   private Collection<Calendar> getCurrentMonth() {
+   private Collection<Calendar> getMonthList( int aMonth ) {
     Calendar calendar = Calendar.getInstance( );
-    List<Calendar> calendars = new ArrayList<>(  );
+     calendar.set( Calendar.MONTH, aMonth );
+     List<Calendar> calendars = new ArrayList<>(  );
 
     for( int i = 1; i <= calendar.getActualMaximum( Calendar.DAY_OF_MONTH ); i++ ){
       calendar.set(Calendar.DAY_OF_MONTH, i );

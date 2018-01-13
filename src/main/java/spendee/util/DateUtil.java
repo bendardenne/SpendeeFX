@@ -32,6 +32,10 @@ public final class DateUtil {
     long days =
         TimeUnit.DAYS.convert( lastDay.getTimeInMillis() - firstDay.getTimeInMillis(), TimeUnit.MILLISECONDS ) + 1;
 
+    if ( firstDay.get( Calendar.DAY_OF_YEAR ) == 1 && days == firstDay.getActualMaximum( Calendar.DAY_OF_YEAR ) ) {
+      return Integer.toString( firstDay.get( Calendar.YEAR ) );
+    }
+
     // Check whole month
     if ( firstDay.get( Calendar.DAY_OF_MONTH ) == 1 && days == firstDay.getActualMaximum( Calendar.DAY_OF_MONTH ) ) {
       return WHOLE_MONTH.format( aCalendars.get( 0 ).getTime() );
@@ -41,7 +45,7 @@ public final class DateUtil {
       return "Week of " + SINGLE_DAY.format( aCalendars.get( 0 ).getTime() );
     }
 
-    return days + " days selected";
+    return aCalendars.size() + " days selected";
   }
 
 }

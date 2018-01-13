@@ -38,6 +38,11 @@
     -fx-border-color: transparent;
 }
 
+
+.hyperlink:pressed {
+    -fx-text-fill: inherit;
+}
+
 .hyperlink:visited {
     -fx-text-fill: inherit;
 }
