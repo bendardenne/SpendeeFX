@@ -12,7 +12,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import spendee.model.Category;
-import spendee.model.DataStore;
+import spendee.model.Wallet;
 import spendee.model.EFilterType;
 import spendee.model.Transaction;
 
@@ -28,8 +28,11 @@ public class CategoryFilter implements IFilterController {
 
   @FXML private MenuButton categoryFilter;
 
-  private DataStore dataStore = DataStore.getInstance();
+  private Wallet wallet;
 
+  public CategoryFilter(Wallet aWallet) {
+    wallet = aWallet;
+  }
 
   @Override public void initialize() {
     populate();
@@ -44,12 +47,14 @@ public class CategoryFilter implements IFilterController {
     categories.add( selectAll );
     categories.add( new SeparatorMenuItem() );
 
-    Map<Category.Type, List<Category>> categoriesByType = dataStore.getUnfilteredTransactions().stream()
-                                                                   .map( Transaction::getCategory )
-                                                                   .collect( groupingBy( Category::getType ) );
+    Map<Category.Type, List<Category>> categoriesByType = wallet.getUnfilteredTransactions().stream()
+                                                                .map( Transaction::getCategory )
+                                                                .collect( groupingBy( Category::getType ) );
 
-    List<CheckMenuItem> incomeEntries = getMenuItems( categoriesByType.get( Category.Type.INCOME ) );
-    List<CheckMenuItem> expenseEntries = getMenuItems( categoriesByType.get( Category.Type.EXPENSE ) );
+    List<CheckMenuItem> incomeEntries = getMenuItems( categoriesByType.getOrDefault( Category.Type.INCOME,
+                                                                                     new ArrayList<>(  ) ) );
+    List<CheckMenuItem> expenseEntries = getMenuItems( categoriesByType.getOrDefault( Category.Type.EXPENSE,
+                                                                                      new ArrayList<>(  )) );
 
     categories.addAll( incomeEntries );
     categories.add( new SeparatorMenuItem() );
@@ -72,7 +77,7 @@ public class CategoryFilter implements IFilterController {
                                                         .map( CheckMenuItem::getText )
                                                         .anyMatch( t.getCategory().getName()::equals );
 
-      dataStore.filter( EFilterType.CATEGORY, predicate );
+      wallet.filter( EFilterType.CATEGORY, predicate );
     };
 
     allEntries.forEach( item -> {

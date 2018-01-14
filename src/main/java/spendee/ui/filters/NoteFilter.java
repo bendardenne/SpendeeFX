@@ -9,7 +9,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import org.controlsfx.control.textfield.TextFields;
-import spendee.model.DataStore;
+import spendee.model.Wallet;
 import spendee.model.EFilterType;
 import spendee.model.Transaction;
 import spendee.ui.StatusController;
@@ -35,21 +35,25 @@ public class NoteFilter implements IFilterController {
 
   @FXML private Button clearButton;
 
-  private DataStore dataStore = DataStore.getInstance();
+  private Wallet wallet;
+
   private SuggestionProvider<String> hashtagProvider;
   private StatusController statusController;
 
+  public NoteFilter(Wallet aWallet){
+    wallet = aWallet;
+  }
 
   @Override public void initialize() {
     noteFilter.textProperty().addListener( ( observable, oldValue, newValue ) ->
-                                               dataStore.filter( EFilterType.NOTE, makeRegexPredicate( newValue ) ) );
+                                               wallet.filter( EFilterType.NOTE, makeRegexPredicate( newValue ) ) );
 
     clearButton.setOnAction( e -> reset() );
 
     // Will be populated later.
     hashtagProvider = SuggestionProvider.create( Collections.emptyList() );
     TextFields.bindAutoCompletion( noteFilter, hashtagProvider );
-    dataStore.getTransactions().addListener( ( ListChangeListener<Transaction> ) c -> populateHashtagsList() );
+    wallet.getTransactions().addListener( ( ListChangeListener<Transaction> ) c -> populateHashtagsList() );
     populateHashtagsList();
   }
 
@@ -60,7 +64,7 @@ public class NoteFilter implements IFilterController {
   private void populateHashtagsList() {
     hashtagsList.getChildren().clear();
 
-    Map<String, Long> map = extractHashtags( dataStore.getTransactions() );
+    Map<String, Long> map = extractHashtags( wallet.getTransactions() );
 
     map.entrySet().stream()
        .sorted( Collections.reverseOrder(

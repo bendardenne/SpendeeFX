@@ -7,7 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import jfxtras.scene.control.CalendarPicker;
-import spendee.model.DataStore;
+import spendee.model.Wallet;
 import spendee.model.EFilterType;
 import spendee.util.DateUtil;
 
@@ -23,7 +23,11 @@ public class DateFilter implements IFilterController {
   @FXML private Hyperlink allTime;
   @FXML private Label dateLabel;
 
-  private DataStore dataStore = DataStore.getInstance();
+  private Wallet wallet;
+
+  public DateFilter(Wallet aWallet) {
+    wallet = aWallet;
+  }
 
   @Override public void initialize() {
     ObservableList<Calendar> selectedDates = dateFilter.calendars();
@@ -33,12 +37,12 @@ public class DateFilter implements IFilterController {
     selectedDates.addListener( ( ListChangeListener<Calendar> ) c -> {
       ObservableList<? extends Calendar> dates = c.getList().sorted();
       if ( dates.size() == 0 ) {
-        dataStore.filter( EFilterType.DATE, t -> true );
+        wallet.filter( EFilterType.DATE, t -> true );
       }
       else {
-        dataStore.filter( EFilterType.DATE, t -> dates.stream()
-                                                      .map( DateUtil::toLocalDate )
-                                                      .anyMatch( t.getDate().toLocalDate()::equals ));
+        wallet.filter( EFilterType.DATE, t -> dates.stream()
+                                                   .map( DateUtil::toLocalDate )
+                                                   .anyMatch( t.getDate().toLocalDate()::equals ));
       }
     } );
 

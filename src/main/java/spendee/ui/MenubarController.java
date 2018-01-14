@@ -5,8 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
 import spendee.model.CSVDecoder;
-import spendee.model.DataStore;
 import spendee.model.Transaction;
+import spendee.model.Wallet;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,11 @@ public class MenubarController {
   @FXML private MenuBar menuBar;
 
   private StatusController statusController;
-  private DataStore dataStore = DataStore.getInstance();
+  private Wallet wallet;
+
+  public MenubarController( Wallet aWallet ) {
+    wallet = aWallet;
+  }
 
   @FXML
   protected void onOpen( ActionEvent any ) {
@@ -31,7 +35,7 @@ public class MenubarController {
     if ( file != null ) {
       try {
         List<Transaction> decoded = CSVDecoder.decode( file.toPath() );
-        dataStore.setTransactions( decoded );
+        wallet.setTransactions( decoded );
         Preferences.userRoot().put( OPEN_FILE.getKey(), file.toString() );
       }
       catch ( IOException aE ) {

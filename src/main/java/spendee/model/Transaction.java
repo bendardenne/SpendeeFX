@@ -4,10 +4,10 @@ import java.time.ZonedDateTime;
 
 public class Transaction {
 
-  private double amount;
-  private String note;
-  private ZonedDateTime date;
-  private Category category;
+  private final double amount;
+  private final String note;
+  private final ZonedDateTime date;
+  private final Category category;
 
   public Transaction( double aAmount, String aNote, ZonedDateTime aDate, Category aCategory ) {
     amount = aAmount;

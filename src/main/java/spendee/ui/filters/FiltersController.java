@@ -5,7 +5,7 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import spendee.model.DataStore;
+import spendee.model.Wallet;
 import spendee.model.Transaction;
 import spendee.ui.StatusController;
 
@@ -20,20 +20,24 @@ public class FiltersController {
   @FXML private NoteFilter noteFilterController;
   @FXML private ScriptingFilter scriptingFilterController;
 
-  private DataStore dataStore = DataStore.getInstance();
+  private Wallet wallet;
   private StatusController statusController;
 
+  public FiltersController(Wallet aWallet){
+    wallet = aWallet;
+  }
+
   @FXML public void initialize() {
-    dataStore.getUnfilteredTransactions().addListener( ( ListChangeListener<Transaction> ) c -> resetFilters() );
+    wallet.getUnfilteredTransactions().addListener( ( ListChangeListener<Transaction> ) c -> resetFilters() );
     resetFilters.setOnAction( e -> resetFilters() );
 
     shownTransactions.textProperty().bind( Bindings.format( "Showing %d of %d transactions",
-                                                            Bindings.size( dataStore.getTransactions() ),
-                                                            Bindings.size( dataStore.getUnfilteredTransactions() ) ) );
+                                                            Bindings.size( wallet.getTransactions() ),
+                                                            Bindings.size( wallet.getUnfilteredTransactions() ) ) );
   }
 
   private void resetFilters() {
-    dataStore.resetFilters();
+    wallet.resetFilters();
 
     dateFilterController.reset();
     amountFilterController.reset();

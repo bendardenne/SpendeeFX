@@ -21,7 +21,7 @@ import javafx.util.StringConverter;
 import org.gillius.jfxutils.chart.ChartPanManager;
 import org.gillius.jfxutils.chart.JFXChartUtil;
 import spendee.model.Category;
-import spendee.model.DataStore;
+import spendee.model.Wallet;
 import spendee.model.Transaction;
 import spendee.ui.CssClassProvider;
 
@@ -52,10 +52,14 @@ public class ChartsController {
   @FXML private NumberAxis xAxis;
   @FXML private NumberAxis yAxis;
 
-  private DataStore dataStore = DataStore.getInstance();
+  private Wallet wallet;
+
+  public ChartsController(Wallet aWallet) {
+    wallet = aWallet;
+  }
 
   @FXML public void initialize() {
-    ObservableList<Transaction> transactions = dataStore.getTransactions();
+    ObservableList<Transaction> transactions = wallet.getTransactions();
     updateCharts( transactions );
 
     transactions.addListener( ( ListChangeListener<? super Transaction> ) ( e ) -> updateCharts( e.getList() ) );

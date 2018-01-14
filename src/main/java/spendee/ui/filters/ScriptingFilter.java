@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
-import spendee.model.DataStore;
+import spendee.model.Wallet;
 import spendee.model.EFilterType;
 import spendee.model.Transaction;
 import spendee.ui.StatusController;
@@ -18,8 +18,12 @@ public class ScriptingFilter implements IFilterController {
   @FXML private TextArea scriptingFilter;
   @FXML private Button clearButton;
 
-  private DataStore dataStore = DataStore.getInstance();
+  private Wallet wallet;
   private StatusController statusController;
+
+  public ScriptingFilter(Wallet aWallet) {
+    wallet = aWallet;
+  }
 
   @Override public void initialize() {
     // Hopefully, with Java 9, we can get ES6 arrow functions and then we can do e.g.
@@ -32,10 +36,10 @@ public class ScriptingFilter implements IFilterController {
       try {
         Predicate<Transaction> predicate = ( Predicate<Transaction> )
             scriptEngine.eval( "new java.util.function.Predicate( " + newValue + " )" );
-        dataStore.filter( EFilterType.JAVASCRIPT, predicate );
+        wallet.filter( EFilterType.JAVASCRIPT, predicate );
       }
       catch ( ScriptException aE ) {
-        dataStore.filter( EFilterType.JAVASCRIPT, t -> true );
+        wallet.filter( EFilterType.JAVASCRIPT, t -> true );
         statusController.message( aE.getMessage() );
       }
     } );
