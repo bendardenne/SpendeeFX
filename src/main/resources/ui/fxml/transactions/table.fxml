@@ -5,17 +5,16 @@
 <?import javafx.scene.layout.*?>
 <?import spendee.ui.transactions.AmountCellFactory?>
 <?import spendee.ui.transactions.DateCellFactory?>
-<?import spendee.ui.transactions.NoteCellFactory?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="spendee.ui.transactions.TransactionsTableController"
             stylesheets="/ui/css/transactions/table.css">
-  <TableView fx:id="transactionsTable"  id="transactions-table"
+  <TableView fx:id="transactionsTable" id="transactions-table"
              AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
              AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
-    <!--<columnResizePolicy>-->
-      <!--<TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>-->
-    <!--</columnResizePolicy>-->
+    <columnResizePolicy>
+      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+    </columnResizePolicy>
     <columns>
       <TableColumn text="Date">
         <cellValueFactory>

@@ -3,7 +3,6 @@ package spendee.ui.charts;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -25,7 +24,7 @@ import org.gillius.jfxutils.chart.JFXChartUtil;
 import spendee.model.Category;
 import spendee.model.Transaction;
 import spendee.model.Wallet;
-import spendee.ui.CssClassProvider;
+import spendee.ui.ColourProvider;
 
 import java.text.DecimalFormat;
 import java.time.Instant;
@@ -62,11 +61,8 @@ public class ChartsController {
   }
 
   @FXML public void initialize() {
-    ListChangeListener<PieChart.Data> addCssClass = c -> c.getList().forEach(
-        slice -> slice.getNode().getStyleClass().add( CssClassProvider.getCssClass( slice.getName() ) ) );
-
     ChangeListener<ObservableList<PieChart.Data>> addCss = ( observable, oldValue, newValue ) -> newValue.forEach(
-        slice -> slice.getNode().getStyleClass().add( CssClassProvider.getCssClass( slice.getName() ) ) );
+        slice -> slice.getNode().setStyle( "-fx-pie-color: " + ColourProvider.getColourString( slice.getName() ) ) );
 
     // CSS class list null until the node is actually added to the chart. So we cannot set the class at construction
     // time. This listener does the trick, although it might be a bit lucky that the node gets added before this
