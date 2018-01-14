@@ -7,11 +7,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import jfxtras.scene.control.CalendarPicker;
+import spendee.model.Transaction;
 import spendee.model.Wallet;
-import spendee.model.EFilterType;
+import spendee.model.filter.EFilterType;
+import spendee.model.filter.Filter;
 import spendee.util.DateUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
 
 public class DateFilter implements IFilterController {
 
@@ -25,7 +30,7 @@ public class DateFilter implements IFilterController {
 
   private Wallet wallet;
 
-  public DateFilter(Wallet aWallet) {
+  public DateFilter( Wallet aWallet ) {
     wallet = aWallet;
   }
 
@@ -37,12 +42,10 @@ public class DateFilter implements IFilterController {
     selectedDates.addListener( ( ListChangeListener<Calendar> ) c -> {
       ObservableList<? extends Calendar> dates = c.getList().sorted();
       if ( dates.size() == 0 ) {
-        wallet.filter( EFilterType.DATE, t -> true );
+        wallet.filter( EFilterType.DATE, Filter.acceptAll( new ArrayList<>() ) );
       }
       else {
-        wallet.filter( EFilterType.DATE, t -> dates.stream()
-                                                   .map( DateUtil::toLocalDate )
-                                                   .anyMatch( t.getDate().toLocalDate()::equals ));
+        wallet.filter( EFilterType.DATE, makeFilter( dates ) );
       }
     } );
 
@@ -57,26 +60,33 @@ public class DateFilter implements IFilterController {
     allTime.setOnAction( e -> reset() );
   }
 
-  private Collection<Calendar> getYearList( int aYear ) {
-    Calendar calendar = Calendar.getInstance( );
-    calendar.set( Calendar.YEAR, aYear );
-    List<Calendar> calendars = new ArrayList<>(  );
+  private Filter<Transaction, Object> makeFilter( List<? extends Calendar> aDates ) {
+    return new Filter<>( t -> aDates.stream()
+                                    .map( DateUtil::toLocalDate )
+                                    .anyMatch( t.getDate().toLocalDate()::equals ),
+                         aDates );
+  }
 
-    for( int i = 1; i <= calendar.getActualMaximum( Calendar.DAY_OF_YEAR ); i++ ){
-      calendar.set(Calendar.DAY_OF_YEAR, i );
+  private Collection<Calendar> getYearList( int aYear ) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set( Calendar.YEAR, aYear );
+    List<Calendar> calendars = new ArrayList<>();
+
+    for ( int i = 1; i <= calendar.getActualMaximum( Calendar.DAY_OF_YEAR ); i++ ) {
+      calendar.set( Calendar.DAY_OF_YEAR, i );
       calendars.add( ( Calendar ) calendar.clone() );
     }
 
     return calendars;
   }
 
-   private Collection<Calendar> getMonthList( int aMonth ) {
-    Calendar calendar = Calendar.getInstance( );
-     calendar.set( Calendar.MONTH, aMonth );
-     List<Calendar> calendars = new ArrayList<>(  );
+  private Collection<Calendar> getMonthList( int aMonth ) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set( Calendar.MONTH, aMonth );
+    List<Calendar> calendars = new ArrayList<>();
 
-    for( int i = 1; i <= calendar.getActualMaximum( Calendar.DAY_OF_MONTH ); i++ ){
-      calendar.set(Calendar.DAY_OF_MONTH, i );
+    for ( int i = 1; i <= calendar.getActualMaximum( Calendar.DAY_OF_MONTH ); i++ ) {
+      calendar.set( Calendar.DAY_OF_MONTH, i );
       calendars.add( ( Calendar ) calendar.clone() );
     }
 

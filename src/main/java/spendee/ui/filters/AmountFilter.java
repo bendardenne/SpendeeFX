@@ -4,10 +4,12 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.util.Pair;
 import org.controlsfx.control.RangeSlider;
-import spendee.model.EFilterType;
 import spendee.model.Transaction;
 import spendee.model.Wallet;
+import spendee.model.filter.EFilterType;
+import spendee.model.filter.Filter;
 
 import static java.util.stream.Collectors.summarizingDouble;
 
@@ -33,14 +35,19 @@ public class AmountFilter implements IFilterController {
 
     // Update filter when high and low are changed.
     ChangeListener<Number> updateAmountFilter = ( observable, oldValue, newValue ) ->
-        wallet.filter( EFilterType.AMOUNT, t -> amountFilter.getLowValue() <= t.getAmount() &&
-                                                t.getAmount() <= amountFilter.getHighValue() );
+        wallet.filter( EFilterType.AMOUNT, makeAmountFilter() );
 
     amountFilter.lowValueProperty().addListener( updateAmountFilter );
     amountFilter.highValueProperty().addListener( updateAmountFilter );
 
     minAmount.textProperty().bind( amountFilter.lowValueProperty().asString( "%.0f" ) );
     maxAmount.textProperty().bind( amountFilter.highValueProperty().asString( "%.0f" ) );
+  }
+
+  private Filter<Transaction, Pair<Double, Double>> makeAmountFilter() {
+    return new Filter<>(
+        t -> amountFilter.getLowValue() <= t.getAmount() && t.getAmount() <= amountFilter.getHighValue(),
+        new Pair<>( amountFilter.getLowValue(), amountFilter.getHighValue() ) );
   }
 
   private double getMax() {

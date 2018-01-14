@@ -1,11 +1,11 @@
-- Scripting filter : try to introduce autocompletion
 - Persist filters
 - Improve table style
-- Add a configurable initial wallet value
-- Allow clicking on Hashtags on line labels
-- Use Spendee icons?
-- Style line in line chart for positive and negative balances
+- Allow clicking on Hashtags on line labels / table cells
+- Show summary including initial wallet? 
 - Introduce nested categories (?) 
 - Allow clicking on pie slice to filter on that category 
 - Interpret entities in note fields (e.g. '  = \&#39;)
 - Deal with error handling (add logging)
+- Style line in line chart for positive and negative balances
+- Scripting filter : try to introduce autocompletion
+- Use Spendee icons?

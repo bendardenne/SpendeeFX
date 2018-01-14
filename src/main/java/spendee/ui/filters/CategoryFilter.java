@@ -12,9 +12,10 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import spendee.model.Category;
-import spendee.model.Wallet;
-import spendee.model.EFilterType;
 import spendee.model.Transaction;
+import spendee.model.Wallet;
+import spendee.model.filter.EFilterType;
+import spendee.model.filter.Filter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class CategoryFilter implements IFilterController {
 
   private Wallet wallet;
 
-  public CategoryFilter(Wallet aWallet) {
+  public CategoryFilter( Wallet aWallet ) {
     wallet = aWallet;
   }
 
@@ -52,9 +53,9 @@ public class CategoryFilter implements IFilterController {
                                                                 .collect( groupingBy( Category::getType ) );
 
     List<CheckMenuItem> incomeEntries = getMenuItems( categoriesByType.getOrDefault( Category.Type.INCOME,
-                                                                                     new ArrayList<>(  ) ) );
+                                                                                     new ArrayList<>() ) );
     List<CheckMenuItem> expenseEntries = getMenuItems( categoriesByType.getOrDefault( Category.Type.EXPENSE,
-                                                                                      new ArrayList<>(  )) );
+                                                                                      new ArrayList<>() ) );
 
     categories.addAll( incomeEntries );
     categories.add( new SeparatorMenuItem() );
@@ -71,13 +72,15 @@ public class CategoryFilter implements IFilterController {
     EventHandler<ActionEvent> setupCategoryFilter = event -> {
       selectAll.setSelected( allEntries.stream().allMatch( CheckMenuItem::isSelected ) );
 
-      Predicate<Transaction> predicate = t -> allEntries.stream()
-                                                        .map( CheckMenuItem.class::cast )
-                                                        .filter( CheckMenuItem::isSelected )
-                                                        .map( CheckMenuItem::getText )
-                                                        .anyMatch( t.getCategory().getName()::equals );
 
-      wallet.filter( EFilterType.CATEGORY, predicate );
+      List<String> selectedCategories = allEntries.stream()
+                                                  .map( CheckMenuItem.class::cast )
+                                                  .filter( CheckMenuItem::isSelected )
+                                                  .map( CheckMenuItem::getText )
+                                                  .collect( toList() );
+
+      Predicate<Transaction> predicate = t -> selectedCategories.stream().anyMatch( t.getCategory().getName()::equals );
+      wallet.filter( EFilterType.CATEGORY, new Filter<>( predicate, selectedCategories ) );
     };
 
     allEntries.forEach( item -> {

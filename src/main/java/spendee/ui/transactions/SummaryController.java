@@ -35,7 +35,8 @@ public class SummaryController {
                                     .stream()
                                     .filter( t -> t.getAmount() > 0 )
                                     .mapToDouble( Transaction::getAmount )
-                                    .sum() ), transactions ) );
+                                    .sum() ),
+        transactions ) );
 
     expenseTotal.textProperty().bind( Bindings.createStringBinding(
         () -> formatter.format( transactions
