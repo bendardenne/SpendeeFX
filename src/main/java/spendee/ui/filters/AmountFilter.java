@@ -26,16 +26,6 @@ public class AmountFilter implements IFilterController {
 
   @Override public void initialize() {
     amountFilter.minProperty().bind( Bindings.createDoubleBinding( this::getMin, wallet.getUnfilteredTransactions() ) );
-
-//    amountFilter.minProperty().bind( Bindings.createDoubleBinding(
-//        () -> Double.MIN_VALUE,
-//        wallet.getUnfilteredTransactions() ) );
-
-
-//    amountFilter.maxProperty().bind( Bindings.createDoubleBinding(
-//        () -> Double.MAX_VALUE,
-//        wallet.getUnfilteredTransactions() ) );
-//
     amountFilter.maxProperty().bind( Bindings.createDoubleBinding( this::getMax, wallet.getUnfilteredTransactions() ) );
 
     amountFilter.setHighValue( amountFilter.getMax() );

@@ -13,6 +13,9 @@
       <Tab text="Charts">
         <fx:include source="charts/charts.fxml"/>
       </Tab>
+      <Tab text="Config">
+        <fx:include source="config/config.fxml"/>
+      </Tab>
     </TabPane>
   </center>
 

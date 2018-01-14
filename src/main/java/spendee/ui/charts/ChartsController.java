@@ -1,5 +1,7 @@
 package spendee.ui.charts;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -21,8 +23,8 @@ import javafx.util.StringConverter;
 import org.gillius.jfxutils.chart.ChartPanManager;
 import org.gillius.jfxutils.chart.JFXChartUtil;
 import spendee.model.Category;
-import spendee.model.Wallet;
 import spendee.model.Transaction;
+import spendee.model.Wallet;
 import spendee.ui.CssClassProvider;
 
 import java.text.DecimalFormat;
@@ -35,6 +37,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.DoubleAdder;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,16 +57,28 @@ public class ChartsController {
 
   private Wallet wallet;
 
-  public ChartsController(Wallet aWallet) {
+  public ChartsController( Wallet aWallet ) {
     wallet = aWallet;
   }
 
   @FXML public void initialize() {
-    ObservableList<Transaction> transactions = wallet.getTransactions();
-    updateCharts( transactions );
+    ListChangeListener<PieChart.Data> addCssClass = c -> c.getList().forEach(
+        slice -> slice.getNode().getStyleClass().add( CssClassProvider.getCssClass( slice.getName() ) ) );
 
-    transactions.addListener( ( ListChangeListener<? super Transaction> ) ( e ) -> updateCharts( e.getList() ) );
+    ChangeListener<ObservableList<PieChart.Data>> addCss = ( observable, oldValue, newValue ) -> newValue.forEach(
+        slice -> slice.getNode().getStyleClass().add( CssClassProvider.getCssClass( slice.getName() ) ) );
 
+    // CSS class list null until the node is actually added to the chart. So we cannot set the class at construction
+    // time. This listener does the trick, although it might be a bit lucky that the node gets added before this
+    // listener is called.
+    incomeDonut.dataProperty().addListener( addCss );
+    expenseDonut.dataProperty().addListener( addCss );
+
+    setupBindings();
+    setupLineChart();
+  }
+
+  private void setupLineChart() {
     xAxis.setAutoRanging( true );
     xAxis.setForceZeroInRange( false );
 
@@ -106,30 +121,33 @@ public class ChartsController {
     panManager.start();
   }
 
-  private void updateCharts( ObservableList<? extends Transaction> aTransactions ) {
-    Stream<? extends Transaction> incomes = aTransactions.stream().filter( t -> t.getAmount() > 0 );
-    Stream<? extends Transaction> expenses = aTransactions.stream().filter( t -> t.getAmount() < 0 );
+  private void setupBindings() {
+    ObservableList<Transaction> transactions = wallet.getTransactions();
 
-    List<PieChart.Data> incomeData = makePieData( incomes );
-    List<PieChart.Data> expenseData = makePieData( expenses );
+    Predicate<Transaction> expenseFilter = t -> t.getCategory().getType() == Category.Type.EXPENSE;
+    Predicate<Transaction> incomeFilter = expenseFilter.negate();
 
+    expenseDonut.dataProperty().bind( Bindings.createObjectBinding(
+        () -> FXCollections.observableList( makePieData( expenseFilter ) ),
+        transactions ) );
 
-    incomeDonut.setData( FXCollections.observableList( incomeData ) );
-    expenseDonut.setData( FXCollections.observableList( expenseData ) );
+    incomeDonut.dataProperty().bind( Bindings.createObjectBinding(
+        () -> FXCollections.observableList( makePieData( incomeFilter ) ),
+        transactions ) );
 
-    incomeData.forEach(
-        slice -> slice.getNode().getStyleClass().add( CssClassProvider.getCssClass( slice.getName() ) ) );
-
-    expenseData.forEach(
-        slice -> slice.getNode().getStyleClass().add( CssClassProvider.getCssClass( slice.getName() ) ) );
-
-    timeSeries.setData( FXCollections.singletonObservableList( makeBalanceSeries( aTransactions.stream() ) ) );
+    timeSeries.dataProperty().bind(
+        Bindings.createObjectBinding(
+            () -> FXCollections.singletonObservableList( makeBalanceSeries( transactions.stream() ) ),
+            transactions,
+            wallet.initialValueProperty() ) );
   }
+
 
   private XYChart.Series<Long, Double> makeBalanceSeries( Stream<? extends Transaction> aStream ) {
     XYChart.Series<Long, Double> series = new XYChart.Series<>();
 
     DoubleAdder acc = new DoubleAdder();
+    acc.add( wallet.getInitialValue() );
 
     List<Pair<Transaction, Double>> balances = aStream.sorted( Comparator.comparing( Transaction::getDate ) )
                                                       .map( transaction -> {
@@ -148,11 +166,13 @@ public class ChartsController {
     return series;
   }
 
-  private List<PieChart.Data> makePieData( Stream<? extends Transaction> aIncomes ) {
-    Map<Category, Double> amountByCategory = aIncomes
-        .collect( Collectors.groupingBy(
-            Transaction::getCategory,
-            Collectors.summingDouble( t -> Math.abs( t.getAmount() ) ) ) );
+  private List<PieChart.Data> makePieData( Predicate<Transaction> aFilter ) {
+    Map<Category, Double> amountByCategory = wallet.getTransactions()
+                                                   .stream()
+                                                   .filter( aFilter )
+                                                   .collect( Collectors.groupingBy(
+                                                       Transaction::getCategory,
+                                                       Collectors.summingDouble( t -> Math.abs( t.getAmount() ) ) ) );
 
     return amountByCategory.entrySet()
                            .stream()

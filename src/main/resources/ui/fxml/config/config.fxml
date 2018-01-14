@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.*?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="spendee.ui.config.ConfigController"
+          alignment="CENTER">
+  <Label text="Initial wallet value"
+         GridPane.rowIndex="0"
+         GridPane.columnIndex="0"/>
+
+  <Spinner fx:id="initialWallet"
+           GridPane.rowIndex="0"
+           GridPane.columnIndex="1"
+           editable="true"
+           initialValue="0" min="-5000000" max="500000000"/>
+
+</GridPane>

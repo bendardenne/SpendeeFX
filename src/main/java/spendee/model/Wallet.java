@@ -2,6 +2,7 @@ package spendee.model;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -17,6 +18,8 @@ public class Wallet {
   private ObservableMap<EFilterType, Predicate<Transaction>> filters = FXCollections.observableHashMap();
   private FilteredList<Transaction> transactions = new FilteredList<>( backingStore );
   private final ObjectBinding<Predicate<? super Transaction>> binding;
+
+  private SimpleDoubleProperty initialValue = new SimpleDoubleProperty( this, "initialValue" );
 
   public Wallet() {
     // Dynamic predicate so to that filtered list is updated when the filters are changed.
@@ -46,5 +49,17 @@ public class Wallet {
 
   public void filter( EFilterType aType, Predicate<Transaction> aPredicate ) {
     filters.put( aType, aPredicate );
+  }
+
+  public double getInitialValue() {
+    return initialValue.get();
+  }
+
+  public SimpleDoubleProperty initialValueProperty() {
+    return initialValue;
+  }
+
+  public void setInitialValue( double aInitialValue ) {
+    this.initialValue.set( aInitialValue );
   }
 }
