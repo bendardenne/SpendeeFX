@@ -9,5 +9,4 @@
 - Style line in line chart for positive and negative balances
 - Scripting filter : try to introduce autocompletion
 - Use Spendee icons?
-- Prevent closing tabs
 - Move colours to a config file or something

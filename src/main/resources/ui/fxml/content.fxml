@@ -6,7 +6,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml">
   <center>
-    <TabPane>
+    <TabPane tabClosingPolicy="UNAVAILABLE">
       <Tab text="Transactions">
         <fx:include source="transactions/table.fxml"/>
       </Tab>
