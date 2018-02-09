@@ -1,3 +1,8 @@
+#transactions-table {
+    -fx-selection-bar: #B8E1FF;
+    -fx-selection-bar-non-focused: #D9EFFF;
+}
+
 .cell-amount-negative {
     -fx-text-fill: #e35d6a;
 }

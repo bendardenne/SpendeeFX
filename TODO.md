@@ -1,7 +1,7 @@
 - Persist filters
 - Improve table style
 - Allow clicking on Hashtags on line labels / table cells
-- Show summary including initial wallet? 
+- Show summary including initial wallet?  Remove initial wallet? 
 - Introduce nested categories (?) 
 - Allow clicking on pie slice to filter on that category 
 - Interpret entities in note fields (e.g. '  = \&#39;)
@@ -9,3 +9,7 @@
 - Style line in line chart for positive and negative balances
 - Scripting filter : try to introduce autocompletion
 - Use Spendee icons?
+- Prevent closing tabs
+- Change selection color on the table (hides hashtags)
+- Hashtag bug: sometimes missing in table cell
+

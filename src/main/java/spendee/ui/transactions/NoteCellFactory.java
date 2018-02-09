@@ -21,7 +21,10 @@ import java.util.regex.PatternSyntaxException;
 public class NoteCellFactory implements Callback<TableColumn<Transaction, String>, TableCell<Transaction, String>> {
 
   private Wallet wallet;
-  private EventHandler<ActionEvent> linkClicked;
+  private EventHandler<ActionEvent> linkClicked = event -> {
+    String hashtag = ( ( Hyperlink ) event.getSource() ).getText();
+    wallet.filter( EFilterType.NOTE, makeRegexFilter( hashtag ) );
+  };
 
   public NoteCellFactory( Wallet aWallet ) {
     wallet = aWallet;
@@ -53,10 +56,6 @@ public class NoteCellFactory implements Callback<TableColumn<Transaction, String
         }
 
         HyperlinkLabel label = new HyperlinkLabel( sb.toString() );
-        linkClicked = event -> {
-          String hashtag = ( ( Hyperlink ) event.getSource() ).getText();
-          wallet.filter( EFilterType.NOTE, makeRegexFilter( hashtag ) );
-        };
         label.setOnAction( linkClicked );
         setGraphic( label );
       }
