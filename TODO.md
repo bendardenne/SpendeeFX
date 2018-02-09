@@ -10,6 +10,4 @@
 - Scripting filter : try to introduce autocompletion
 - Use Spendee icons?
 - Prevent closing tabs
-- Change selection color on the table (hides hashtags)
-- Hashtag bug: sometimes missing in table cell
-
+- Move colours to a config file or something

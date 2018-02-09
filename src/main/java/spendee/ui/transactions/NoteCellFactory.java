@@ -48,7 +48,7 @@ public class NoteCellFactory implements Callback<TableColumn<Transaction, String
 
         for ( String s : split ) {
           if ( hashtags.contains( s ) ) {
-            sb.append( '[' ).append( s ).append( ']' );
+            sb.append( " [" ).append( s ).append( "] " );
           }
           else {
             sb.append( s ).append( ' ' );
