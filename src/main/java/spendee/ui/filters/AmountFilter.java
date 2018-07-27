@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.util.Pair;
 import org.controlsfx.control.RangeSlider;
 import spendee.model.Transaction;
-import spendee.model.Wallet;
+import spendee.model.Account;
 import spendee.model.filter.EFilterType;
 import spendee.model.filter.Filter;
 
@@ -20,22 +20,22 @@ public class AmountFilter implements IFilterController {
   @FXML private Label minAmount;
   @FXML private Label maxAmount;
 
-  private Wallet wallet;
+  private Account account;
 
-  public AmountFilter( Wallet aWallet ) {
-    wallet = aWallet;
+  public AmountFilter( Account aAccount ) {
+    account = aAccount;
   }
 
   @Override public void initialize() {
-    amountFilter.minProperty().bind( Bindings.createDoubleBinding( this::getMin, wallet.getUnfilteredTransactions() ) );
-    amountFilter.maxProperty().bind( Bindings.createDoubleBinding( this::getMax, wallet.getUnfilteredTransactions() ) );
+    amountFilter.minProperty().bind( Bindings.createDoubleBinding( this::getMin, account.getUnfilteredTransactions() ) );
+    amountFilter.maxProperty().bind( Bindings.createDoubleBinding( this::getMax, account.getUnfilteredTransactions() ) );
 
     amountFilter.setHighValue( amountFilter.getMax() );
     amountFilter.setLowValue( amountFilter.getMin() );
 
     // Update filter when high and low are changed.
     ChangeListener<Number> updateAmountFilter = ( observable, oldValue, newValue ) ->
-        wallet.filter( EFilterType.AMOUNT, makeAmountFilter() );
+        account.filter( EFilterType.AMOUNT, makeAmountFilter() );
 
     amountFilter.lowValueProperty().addListener( updateAmountFilter );
     amountFilter.highValueProperty().addListener( updateAmountFilter );
@@ -51,25 +51,25 @@ public class AmountFilter implements IFilterController {
   }
 
   private double getMax() {
-    if ( wallet.getUnfilteredTransactions().size() == 0 ) {
+    if ( account.getUnfilteredTransactions().size() == 0 ) {
       return MAXIMUM_AMOUNT;
     }
 
-    return wallet.getUnfilteredTransactions()
-                 .stream()
-                 .collect( summarizingDouble( Transaction::getAmount ) )
-                 .getMax();
+    return account.getUnfilteredTransactions()
+                  .stream()
+                  .collect( summarizingDouble( Transaction::getAmount ) )
+                  .getMax();
   }
 
   private double getMin() {
-    if ( wallet.getUnfilteredTransactions().size() == 0 ) {
+    if ( account.getUnfilteredTransactions().size() == 0 ) {
       return -MAXIMUM_AMOUNT;
     }
 
-    return wallet.getUnfilteredTransactions()
-                 .stream()
-                 .collect( summarizingDouble( Transaction::getAmount ) )
-                 .getMin();
+    return account.getUnfilteredTransactions()
+                  .stream()
+                  .collect( summarizingDouble( Transaction::getAmount ) )
+                  .getMin();
   }
 
   @Override public void reset() {

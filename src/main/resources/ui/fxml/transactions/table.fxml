@@ -25,6 +25,12 @@
         </cellFactory>
       </TableColumn>
 
+      <TableColumn text="Wallet">
+        <cellValueFactory>
+          <PropertyValueFactory property="wallet"/>
+        </cellValueFactory>
+      </TableColumn>
+
       <TableColumn text="Category">
         <cellValueFactory>
           <PropertyValueFactory property="category"/>

@@ -23,7 +23,7 @@ import org.gillius.jfxutils.chart.ChartPanManager;
 import org.gillius.jfxutils.chart.JFXChartUtil;
 import spendee.model.Category;
 import spendee.model.Transaction;
-import spendee.model.Wallet;
+import spendee.model.Account;
 import spendee.ui.ColourProvider;
 
 import java.text.DecimalFormat;
@@ -54,10 +54,10 @@ public class ChartsController {
   @FXML private NumberAxis xAxis;
   @FXML private NumberAxis yAxis;
 
-  private Wallet wallet;
+  private Account account;
 
-  public ChartsController( Wallet aWallet ) {
-    wallet = aWallet;
+  public ChartsController( Account aAccount ) {
+    account = aAccount;
   }
 
   @FXML public void initialize() {
@@ -118,7 +118,7 @@ public class ChartsController {
   }
 
   private void setupBindings() {
-    ObservableList<Transaction> transactions = wallet.getTransactions();
+    ObservableList<Transaction> transactions = account.getTransactions();
 
     Predicate<Transaction> expenseFilter = t -> t.getCategory().getType() == Category.Type.EXPENSE;
     Predicate<Transaction> incomeFilter = expenseFilter.negate();
@@ -135,7 +135,7 @@ public class ChartsController {
         Bindings.createObjectBinding(
             () -> FXCollections.singletonObservableList( makeBalanceSeries( transactions.stream() ) ),
             transactions,
-            wallet.initialValueProperty() ) );
+            account.initialValueProperty() ) );
   }
 
 
@@ -143,7 +143,7 @@ public class ChartsController {
     XYChart.Series<Long, Double> series = new XYChart.Series<>();
 
     DoubleAdder acc = new DoubleAdder();
-    acc.add( wallet.getInitialValue() );
+    acc.add( account.getInitialValue() );
 
     List<Pair<Transaction, Double>> balances = aStream.sorted( Comparator.comparing( Transaction::getDate ) )
                                                       .map( transaction -> {
@@ -163,10 +163,10 @@ public class ChartsController {
   }
 
   private List<PieChart.Data> makePieData( Predicate<Transaction> aFilter ) {
-    Map<Category, Double> amountByCategory = wallet.getTransactions()
-                                                   .stream()
-                                                   .filter( aFilter )
-                                                   .collect( Collectors.groupingBy(
+    Map<Category, Double> amountByCategory = account.getTransactions()
+                                                    .stream()
+                                                    .filter( aFilter )
+                                                    .collect( Collectors.groupingBy(
                                                        Transaction::getCategory,
                                                        Collectors.summingDouble( t -> Math.abs( t.getAmount() ) ) ) );
 

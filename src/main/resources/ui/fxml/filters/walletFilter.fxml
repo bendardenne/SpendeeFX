@@ -3,11 +3,12 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.layout.VBox?>
 <?import spendee.ui.SelectAllMenuButton?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.CategoryFilter">
-  <Label text="Categories" styleClass="filter-title">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.WalletFilter">
+  <Label text="Wallet" styleClass="filter-title">
     <VBox.margin>
       <Insets bottom="10"/>
     </VBox.margin>
   </Label>
-  <SelectAllMenuButton fx:id="categoryFilter" maxWidth="Infinity"/>
+
+  <SelectAllMenuButton fx:id="walletFilter" maxWidth="Infinity"/>
 </VBox>

@@ -3,14 +3,17 @@ package spendee.ui;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ColourProvider {
+/**
+ * Provide the colours from java so that we can tell when a colour for a category is missing.
+ */
+public final class ColourProvider {
   private static final Map<String, String> COLOR_MAP = new HashMap<>();
 
   static {
     COLOR_MAP.put( "Salary", "#71C643" );
     COLOR_MAP.put( "Meal Vouchers", "#BED940" );
     COLOR_MAP.put( "Reimbursement", "#18B272" );
-    COLOR_MAP.put( "BlaBlaCar", "#47A7E6" );
+    COLOR_MAP.put( "Covoiturage", "#47A7E6" );
     COLOR_MAP.put( "Extra income", "#1EADCE" );
 
     COLOR_MAP.put( "Car", "#47A7E6" );
@@ -20,6 +23,7 @@ public class ColourProvider {
     COLOR_MAP.put( "Gifts", "#F5534B" );
     COLOR_MAP.put( "Groceries", "#B47B55" );
     COLOR_MAP.put( "Take Away & Restaurant", "#B9965E" );
+    COLOR_MAP.put( "Snacks & Coffee Shops", "#FFCC00" );
     COLOR_MAP.put( "Drinks", "#DF8C29" );
     COLOR_MAP.put( "Beer", "#F5534B" );
     COLOR_MAP.put( "Brewing", "#18B272" );
@@ -31,6 +35,9 @@ public class ColourProvider {
     COLOR_MAP.put( "Games", "#3D75AB" );
     COLOR_MAP.put( "Cinema", "#47A7E6" );
     COLOR_MAP.put( "Accommodation", "#6E8CB1" );
+    COLOR_MAP.put( "Travel", "#F963A0" );
+    COLOR_MAP.put( "Tourism", "#DE8135" );
+    COLOR_MAP.put( "Family & Personal", "#F5534B" );
     COLOR_MAP.put( "Healthcare", "#E56274" );
     COLOR_MAP.put( "Clothing", "#BED940" );
 
@@ -45,4 +52,6 @@ public class ColourProvider {
       }
       return color;
   }
+
+  private ColourProvider() {}
 }

@@ -2,19 +2,19 @@ package spendee.ui.config;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
-import spendee.model.Wallet;
+import spendee.model.Account;
 
 public class ConfigController {
 
   @FXML private Spinner<Integer> initialWallet;
-  private Wallet wallet;
+  private Account account;
 
-  public ConfigController( Wallet aWallet ) {
-    wallet = aWallet;
+  public ConfigController( Account aAccount ) {
+    account = aAccount;
   }
 
   @FXML public void initialize() {
-    wallet.initialValueProperty().bind( initialWallet.valueProperty() );
+    account.initialValueProperty().bind( initialWallet.valueProperty() );
   }
 
 }

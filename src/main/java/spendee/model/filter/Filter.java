@@ -1,7 +1,5 @@
 package spendee.model.filter;
 
-import spendee.model.Transaction;
-
 import java.util.function.Predicate;
 
 /**
@@ -35,7 +33,7 @@ public class Filter<T, U> implements Predicate<T> {
     return accepted.toString();
   }
 
-  public static <U> Filter<Transaction, U> acceptAll( U aAccepted ) {
+  public static <T, U> Filter<T, U> acceptAll( U aAccepted ) {
     return new Filter<>( t -> true, aAccepted );
   }
 }

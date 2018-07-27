@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import org.controlsfx.control.textfield.TextFields;
 import spendee.model.Transaction;
-import spendee.model.Wallet;
+import spendee.model.Account;
 import spendee.model.filter.EFilterType;
 import spendee.model.filter.Filter;
 import spendee.ui.StatusController;
@@ -31,29 +31,29 @@ public class NoteFilter implements IFilterController {
 
   @FXML private Button clearButton;
 
-  private Wallet wallet;
+  private Account account;
 
   private SuggestionProvider<String> hashtagProvider;
   private StatusController statusController;
 
-  public NoteFilter( Wallet aWallet ) {
-    wallet = aWallet;
+  public NoteFilter( Account aAccount ) {
+    account = aAccount;
   }
 
   @Override public void initialize() {
     noteFilter.textProperty().addListener( ( observable, oldValue, newValue ) ->
-                                               wallet.filter( EFilterType.NOTE, makeRegexFilter( newValue ) ) );
+                                               account.filter( EFilterType.NOTE, makeRegexFilter( newValue ) ) );
 
     clearButton.setOnAction( e -> reset() );
 
     // Will be populated later.
     hashtagProvider = SuggestionProvider.create( Collections.emptyList() );
     TextFields.bindAutoCompletion( noteFilter, hashtagProvider );
-    wallet.getTransactions().addListener( ( ListChangeListener<Transaction> ) c -> populateHashtagsList() );
+    account.getTransactions().addListener( ( ListChangeListener<Transaction> ) c -> populateHashtagsList() );
     populateHashtagsList();
 
-    wallet.filterProperty( EFilterType.NOTE ).addListener( ( observable, oldValue, newValue ) ->
-            noteFilter.setText( ( String ) wallet.getFilter( EFilterType.NOTE ).getAccepted() ) );
+    account.filterProperty( EFilterType.NOTE ).addListener( ( observable, oldValue, newValue ) ->
+            noteFilter.setText( ( String ) account.getFilter( EFilterType.NOTE ).getAccepted() ) );
   }
 
   @Override public void reset() {
@@ -63,7 +63,7 @@ public class NoteFilter implements IFilterController {
   private void populateHashtagsList() {
     hashtagsList.getChildren().clear();
 
-    Map<String, Long> map = HashtagUtil.extractHashtags( wallet.getTransactions() );
+    Map<String, Long> map = HashtagUtil.extractHashtags( account.getTransactions() );
 
     map.entrySet().stream()
        .sorted( Collections.reverseOrder( Comparator.comparingLong( Map.Entry::getValue ) ) )

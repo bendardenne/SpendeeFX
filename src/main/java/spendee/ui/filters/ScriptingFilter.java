@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import spendee.model.Transaction;
-import spendee.model.Wallet;
+import spendee.model.Account;
 import spendee.model.filter.EFilterType;
 import spendee.model.filter.Filter;
 import spendee.ui.StatusController;
@@ -19,11 +19,11 @@ public class ScriptingFilter implements IFilterController {
   @FXML private TextArea scriptingFilter;
   @FXML private Button clearButton;
 
-  private Wallet wallet;
+  private Account account;
   private StatusController statusController;
 
-  public ScriptingFilter( Wallet aWallet ) {
-    wallet = aWallet;
+  public ScriptingFilter( Account aAccount ) {
+    account = aAccount;
   }
 
   @Override public void initialize() {
@@ -36,10 +36,10 @@ public class ScriptingFilter implements IFilterController {
       try {
         Predicate<Transaction> predicate = ( Predicate<Transaction> )
             scriptEngine.eval( "new java.util.function.Predicate( " + newValue + " )" );
-        wallet.filter( EFilterType.JAVASCRIPT, new Filter<>( predicate, newValue ) );
+        account.filter( EFilterType.JAVASCRIPT, new Filter<>( predicate, newValue ) );
       }
       catch ( ScriptException aE ) {
-        wallet.filter( EFilterType.JAVASCRIPT, Filter.acceptAll( "" ) );
+        account.filter( EFilterType.JAVASCRIPT, Filter.acceptAll( "" ) );
         statusController.message( aE.getMessage() );
       }
     } );

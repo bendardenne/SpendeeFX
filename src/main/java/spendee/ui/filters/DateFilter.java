@@ -8,7 +8,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import jfxtras.scene.control.CalendarPicker;
 import spendee.model.Transaction;
-import spendee.model.Wallet;
+import spendee.model.Account;
 import spendee.model.filter.EFilterType;
 import spendee.model.filter.Filter;
 import spendee.util.DateUtil;
@@ -28,10 +28,10 @@ public class DateFilter implements IFilterController {
   @FXML private Hyperlink allTime;
   @FXML private Label dateLabel;
 
-  private Wallet wallet;
+  private Account account;
 
-  public DateFilter( Wallet aWallet ) {
-    wallet = aWallet;
+  public DateFilter( Account aAccount ) {
+    account = aAccount;
   }
 
   @Override public void initialize() {
@@ -42,10 +42,10 @@ public class DateFilter implements IFilterController {
     selectedDates.addListener( ( ListChangeListener<Calendar> ) c -> {
       ObservableList<? extends Calendar> dates = c.getList().sorted();
       if ( dates.size() == 0 ) {
-        wallet.filter( EFilterType.DATE, Filter.acceptAll( new ArrayList<>() ) );
+        account.filter( EFilterType.DATE, Filter.acceptAll( new ArrayList<>() ) );
       }
       else {
-        wallet.filter( EFilterType.DATE, makeFilter( dates ) );
+        account.filter( EFilterType.DATE, makeFilter( dates ) );
       }
     } );
 

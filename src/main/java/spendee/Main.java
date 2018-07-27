@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import jfxtras.fxml.JFXtrasBuilderFactory;
-import spendee.model.Wallet;
+import spendee.model.Account;
 
 import java.lang.reflect.Constructor;
 
@@ -14,7 +14,7 @@ public class Main extends Application {
 
   @Override
   public void start( Stage primaryStage ) throws Exception {
-    Wallet wallet = new Wallet();
+    Account account = new Account();
 
     FXMLLoader loader = new FXMLLoader( Main.class.getClassLoader().getResource( "ui/fxml/main.fxml" ),
                                         null, new JFXtrasBuilderFactory() );
@@ -23,8 +23,8 @@ public class Main extends Application {
       try {
         // Poor man's DI
         for ( Constructor<?> constructor : type.getConstructors() ) {
-          if ( constructor.getParameterCount() == 1 && constructor.getParameterTypes()[0] == Wallet.class ) {
-            return constructor.newInstance( wallet );
+          if ( constructor.getParameterCount() == 1 && constructor.getParameterTypes()[0] == Account.class ) {
+            return constructor.newInstance( account );
           }
         }
 

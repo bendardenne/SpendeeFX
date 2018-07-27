@@ -2,10 +2,10 @@ package spendee.model;
 
 public class Category {
 
-  public enum Type {INCOME, EXPENSE}
+  public enum Type {INCOME, EXPENSE, TRANSFER}
 
   private String name;
-  private Category.Type type;
+  private Type type;
 
   public Category( String aName, Type aType ){
     name = aName;

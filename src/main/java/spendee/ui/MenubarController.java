@@ -6,7 +6,7 @@ import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
 import spendee.model.CSVDecoder;
 import spendee.model.Transaction;
-import spendee.model.Wallet;
+import spendee.model.Account;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +20,10 @@ public class MenubarController {
   @FXML private MenuBar menuBar;
 
   private StatusController statusController;
-  private Wallet wallet;
+  private Account account;
 
-  public MenubarController( Wallet aWallet ) {
-    wallet = aWallet;
+  public MenubarController( Account aAccount ) {
+    account = aAccount;
   }
 
   @FXML
@@ -35,7 +35,7 @@ public class MenubarController {
     if ( file != null ) {
       try {
         List<Transaction> decoded = CSVDecoder.decode( file.toPath() );
-        wallet.setTransactions( decoded );
+        account.setTransactions( decoded );
         Preferences.userRoot().put( OPEN_FILE.getKey(), file.toString() );
       }
       catch ( IOException aE ) {

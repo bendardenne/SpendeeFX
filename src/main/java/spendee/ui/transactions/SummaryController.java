@@ -6,7 +6,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import spendee.model.Wallet;
+import spendee.model.Account;
 import spendee.model.Transaction;
 
 import java.text.DecimalFormat;
@@ -19,14 +19,14 @@ public class SummaryController {
   @FXML private Label balance;
   @FXML private Label balanceLabel;
 
-  private Wallet wallet;
+  private Account account;
 
-  public SummaryController(Wallet aWallet) {
-    wallet = aWallet;
+  public SummaryController(Account aAccount ) {
+    account = aAccount;
   }
 
   @FXML public void initialize() {
-    ObservableList<Transaction> transactions = wallet.getTransactions();
+    ObservableList<Transaction> transactions = account.getTransactions();
     DecimalFormat formatter = new DecimalFormat( "#.##" );
 
 

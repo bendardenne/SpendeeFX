@@ -8,7 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 import org.controlsfx.control.HyperlinkLabel;
 import spendee.model.Transaction;
-import spendee.model.Wallet;
+import spendee.model.Account;
 import spendee.model.filter.EFilterType;
 import spendee.model.filter.Filter;
 import spendee.util.HashtagUtil;
@@ -20,14 +20,14 @@ import java.util.regex.PatternSyntaxException;
 
 public class NoteCellFactory implements Callback<TableColumn<Transaction, String>, TableCell<Transaction, String>> {
 
-  private Wallet wallet;
+  private Account account;
   private EventHandler<ActionEvent> linkClicked = event -> {
     String hashtag = ( ( Hyperlink ) event.getSource() ).getText();
-    wallet.filter( EFilterType.NOTE, makeRegexFilter( hashtag ) );
+    account.filter( EFilterType.NOTE, makeRegexFilter( hashtag ) );
   };
 
-  public NoteCellFactory( Wallet aWallet ) {
-    wallet = aWallet;
+  public NoteCellFactory( Account aAccount ) {
+    account = aAccount;
   }
 
   @Override public TableCell<Transaction, String> call( TableColumn<Transaction, String> param ) {

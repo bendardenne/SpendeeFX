@@ -5,7 +5,7 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import spendee.model.Wallet;
+import spendee.model.Account;
 import spendee.model.Transaction;
 import spendee.ui.StatusController;
 
@@ -19,30 +19,32 @@ public class FiltersController {
   @FXML private CategoryFilter categoryFilterController;
   @FXML private NoteFilter noteFilterController;
   @FXML private ScriptingFilter scriptingFilterController;
+  @FXML private WalletFilter walletFilterController;
 
-  private Wallet wallet;
+  private Account account;
   private StatusController statusController;
 
-  public FiltersController(Wallet aWallet){
-    wallet = aWallet;
+  public FiltersController(Account aAccount ){
+    account = aAccount;
   }
 
   @FXML public void initialize() {
-    wallet.getUnfilteredTransactions().addListener( ( ListChangeListener<Transaction> ) c -> resetFilters() );
+    account.getUnfilteredTransactions().addListener( ( ListChangeListener<Transaction> ) c -> resetFilters() );
     resetFilters.setOnAction( e -> resetFilters() );
 
     shownTransactions.textProperty().bind( Bindings.format( "Showing %d of %d transactions",
-                                                            Bindings.size( wallet.getTransactions() ),
-                                                            Bindings.size( wallet.getUnfilteredTransactions() ) ) );
+                                                            Bindings.size( account.getTransactions() ),
+                                                            Bindings.size( account.getUnfilteredTransactions() ) ) );
   }
 
   private void resetFilters() {
-    wallet.resetFilters();
+    account.resetFilters();
 
     dateFilterController.reset();
     amountFilterController.reset();
     categoryFilterController.reset();
     scriptingFilterController.reset();
+    walletFilterController.reset();
   }
 
   public void setStatusController( StatusController aStatusController ) {

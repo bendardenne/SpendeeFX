@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class Wallet {
+public class Account {
 
   private final ObservableList<Transaction> unfilteredTransactions = FXCollections.observableArrayList();
   private FilteredList<Transaction> transactions = new FilteredList<>( unfilteredTransactions );
@@ -26,10 +26,10 @@ public class Wallet {
 
   private final ObjectBinding<Predicate<? super Transaction>> binding;
 
-  private SimpleDoubleProperty initialValue = new SimpleDoubleProperty( this, "initialValue" );
+  private SimpleDoubleProperty initialValue = new SimpleDoubleProperty( this, "initialValue", 0d );
 
-  public Wallet() {
-    // Dynamic predicate so to that filtered list is updated when the filters are changed.
+  public Account() {
+    // Dynamic predicate so that filtered list is updated when the filters are changed.
     resetFilters();
     binding = Bindings.createObjectBinding( () -> t -> filters.values().stream().allMatch( p -> p.get().test( t ) ),
                                             filters.values().toArray( new ObjectProperty[]{} ) );

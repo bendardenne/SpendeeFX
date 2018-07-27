@@ -1,6 +1,9 @@
+- Averages (monthly/yearly(/daily?) average per category)
+- Show covered period somewhere
 - Persist filters
+- Allow saving filter presets
 - Improve table style
-- Allow clicking on Hashtags on line labels / table cells
+- Allow clicking on Hashtags on line labels (?)
 - Show summary including initial wallet?  Remove initial wallet? 
 - Introduce nested categories (?) 
 - Allow clicking on pie slice to filter on that category 
@@ -8,5 +11,7 @@
 - Deal with error handling (add logging)
 - Style line in line chart for positive and negative balances
 - Scripting filter : try to introduce autocompletion
-- Use Spendee icons?
 - Move colours to a config file or something
+- Add undo support ? 
+- Use a dependency mgmt tool (gradle?)
+- Introduce more config possibilities and improve config layout
