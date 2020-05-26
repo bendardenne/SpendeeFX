@@ -1,6 +1,5 @@
 package spendee.ui.filters;
 
-import impl.org.controlsfx.autocompletion.SuggestionProvider;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,8 +7,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import org.controlsfx.control.textfield.TextFields;
-import spendee.model.Transaction;
 import spendee.model.Account;
+import spendee.model.Transaction;
 import spendee.model.filter.EFilterType;
 import spendee.model.filter.Filter;
 import spendee.ui.StatusController;
@@ -31,32 +30,33 @@ public class NoteFilter implements IFilterController {
 
   @FXML private Button clearButton;
 
-  private Account account;
-
-  private SuggestionProvider<String> hashtagProvider;
+  private final Account account;
   private StatusController statusController;
 
   public NoteFilter( Account aAccount ) {
     account = aAccount;
   }
 
-  @Override public void initialize() {
+  @Override
+  public void initialize() {
     noteFilter.textProperty().addListener( ( observable, oldValue, newValue ) ->
                                                account.filter( EFilterType.NOTE, makeRegexFilter( newValue ) ) );
 
     clearButton.setOnAction( e -> reset() );
-
     // Will be populated later.
-    hashtagProvider = SuggestionProvider.create( Collections.emptyList() );
-    TextFields.bindAutoCompletion( noteFilter, hashtagProvider );
+//    hashtagProvider = SuggestionProvider.create( Collections.emptyList() );
+//    TextFields.bindAutoCompletion( noteFilter, hashtagProvider );
     account.getTransactions().addListener( ( ListChangeListener<Transaction> ) c -> populateHashtagsList() );
     populateHashtagsList();
 
     account.filterProperty( EFilterType.NOTE ).addListener( ( observable, oldValue, newValue ) ->
-            noteFilter.setText( ( String ) account.getFilter( EFilterType.NOTE ).getAccepted() ) );
+                                                                noteFilter.setText(
+                                                                    ( String ) account.getFilter( EFilterType.NOTE )
+                                                                        .getAccepted() ) );
   }
 
-  @Override public void reset() {
+  @Override
+  public void reset() {
     noteFilter.setText( "" );
   }
 
@@ -66,18 +66,18 @@ public class NoteFilter implements IFilterController {
     Map<String, Long> map = HashtagUtil.extractHashtags( account.getTransactions() );
 
     map.entrySet().stream()
-       .sorted( Collections.reverseOrder( Comparator.comparingLong( Map.Entry::getValue ) ) )
-       .map( Map.Entry::getKey )
-       .limit( MAXIMUM_HASHTAGS )
-       .map( Hyperlink::new )
-       .forEach( link -> {
-         link.setOnAction( e -> noteFilter.setText( link.getText() ) );
-         hashtagsList.getChildren().add( link );
-       } );
+        .sorted( Collections.reverseOrder( Comparator.comparingLong( Map.Entry::getValue ) ) )
+        .map( Map.Entry::getKey )
+        .limit( MAXIMUM_HASHTAGS )
+        .map( Hyperlink::new )
+        .forEach( link -> {
+          link.setOnAction( e -> noteFilter.setText( link.getText() ) );
+          hashtagsList.getChildren().add( link );
+        } );
 
-    hashtagProvider.clearSuggestions();
-    hashtagProvider.addPossibleSuggestions( map.keySet() );
-
+//    hashtagProvider.clearSuggestions();
+//    hashtagProvider.addPossibleSuggestions( map.keySet() );
+    TextFields.bindAutoCompletion( noteFilter, map.keySet() );
   }
 
   private Filter<Transaction, String> makeRegexFilter( String newValue ) {

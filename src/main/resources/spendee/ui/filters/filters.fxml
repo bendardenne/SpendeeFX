@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <ScrollPane xmlns:fx="http://javafx.com/fxml" fx:controller="spendee.ui.filters.FiltersController"
-            stylesheets="/ui/css/filters/filters.css"
+            stylesheets="/spendee/ui/filters/filters.css"
             fitToWidth="true" fitToHeight="true">
 
   <TitledPane text="Filters" collapsible="false">

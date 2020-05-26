@@ -8,7 +8,7 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="spendee.ui.transactions.TransactionsTableController"
-            stylesheets="/ui/css/transactions/table.css">
+            stylesheets="/spendee/ui/transactions/table.css">
   <TableView fx:id="transactionsTable" id="transactions-table"
              AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
              AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">

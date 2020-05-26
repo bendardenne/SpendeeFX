@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import jfxtras.fxml.JFXtrasBuilderFactory;
 import spendee.model.Account;
 
 import java.lang.reflect.Constructor;
@@ -16,8 +15,7 @@ public class Main extends Application {
   public void start( Stage primaryStage ) throws Exception {
     Account account = new Account();
 
-    FXMLLoader loader = new FXMLLoader( Main.class.getClassLoader().getResource( "ui/fxml/main.fxml" ),
-                                        null, new JFXtrasBuilderFactory() );
+    FXMLLoader loader = new FXMLLoader( getClass().getResource( "ui/main.fxml" ));
 
     loader.setControllerFactory( type -> {
       try {

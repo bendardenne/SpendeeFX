@@ -6,7 +6,7 @@
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="spendee.ui.transactions.SummaryController"
-          stylesheets="/ui/css/transactions/summary.css">
+          stylesheets="/spendee/ui/transactions/summary.css">
   <padding>
     <Insets top="5" bottom="5"/>
   </padding>

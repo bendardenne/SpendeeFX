@@ -17,7 +17,7 @@
     <Button fx:id="clearButton" styleClass="clear-button" StackPane.alignment="CENTER_RIGHT">
       <graphic>
         <ImageView pickOnBounds="true" preserveRatio="true">
-          <Image url="/ui/icons/clear.png"/>
+          <Image url="/spendee/ui/icons/clear.png"/>
         </ImageView>
       </graphic>
     </Button>
